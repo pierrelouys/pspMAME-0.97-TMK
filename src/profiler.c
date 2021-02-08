@@ -61,7 +61,7 @@ void profiler__mark(int type)
 	if (type >= PROFILER_CPU1 && type <= PROFILER_CPU8)
 		profile.cpu_context_switches[memory]++;
 
-	curr_cycles = osd_profiling_ticks();
+	//curr_cycles = osd_profiling_ticks(); OJO!
 
 	if (type != PROFILER_END)
 	{

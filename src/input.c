@@ -20,6 +20,11 @@
 
 #define MAX_TOKEN_LEN		64
 
+
+#ifndef CLOCKS_PER_SEC
+#define CLOCKS_PER_SEC 1000000
+#endif
+
 /* max time between key presses */
 #define RECORD_TIME			(CLOCKS_PER_SEC*2/3)
 

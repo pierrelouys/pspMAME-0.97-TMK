@@ -6,6 +6,7 @@
 #include "memory.h"
 #include "osd_cpu.h"
 
+
 enum {
 	KONAMI_PC=1, KONAMI_S, KONAMI_CC ,KONAMI_A, KONAMI_B, KONAMI_U, KONAMI_X, KONAMI_Y,
 	KONAMI_DP };
@@ -55,5 +56,6 @@ void konami_get_info(UINT32 state, union cpuinfo *info);
 #ifdef MAME_DEBUG
 extern unsigned Dasmknmi (char *buffer, unsigned pc);
 #endif
+
 
 #endif /* _KONAMI_H */

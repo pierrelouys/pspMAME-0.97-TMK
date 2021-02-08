@@ -1202,12 +1202,12 @@ void m92_sprite_interrupt(void)
 static MACHINE_DRIVER_START( raster )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(V33,18000000/2)	/* NEC V33, 18 MHz clock */
+	MDRV_CPU_ADD(V33,18000000/2 - 1000000)	/* NEC V33, 18 MHz clock */ //18000000/2
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_IO_MAP(readport,writeport)
 	MDRV_CPU_VBLANK_INT(m92_raster_interrupt,M92_SCANLINES) /* First visible line 8? */
 
-	MDRV_CPU_ADD(V30, 14318180/2)	/* 14.31818 MHz */
+	MDRV_CPU_ADD(V30, 14318180/2  - 1000000)	/* 14.31818 MHz */
 	MDRV_CPU_PROGRAM_MAP(sound_readmem,sound_writemem)
 
 	MDRV_FRAMES_PER_SECOND(60)

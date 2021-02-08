@@ -2756,11 +2756,11 @@ MACHINE_DRIVER_END
 static MACHINE_DRIVER_START( tmnt2 ) //*
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 16000000)	/* 16 MHz */
+	MDRV_CPU_ADD(M68000, 16000000)	//orig 16000000 /* 16 MHz */
 	MDRV_CPU_PROGRAM_MAP(tmnt2_readmem,tmnt2_writemem)
 	MDRV_CPU_VBLANK_INT(punkshot_interrupt,1)
 
-	MDRV_CPU_ADD(Z80, 8000000)
+	MDRV_CPU_ADD(Z80, 6000000) //orig 8000000
 	/* audio CPU */	/* 8 MHz; clock is correct, but there's 1 cycle wait for ROM/RAM */
 						/* access. Access speed of ROM/RAM used on the machine is 150ns, */
 						/* without the wait, they cannot run on 8MHz.                    */
@@ -2799,7 +2799,7 @@ MACHINE_DRIVER_END
 static MACHINE_DRIVER_START( ssriders )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 16000000)	/* 16 MHz */
+	MDRV_CPU_ADD(M68000, 16000000)	//orig 16000000/* 16 MHz */
 	MDRV_CPU_PROGRAM_MAP(ssriders_readmem,ssriders_writemem)
 	MDRV_CPU_VBLANK_INT(punkshot_interrupt,1)
 

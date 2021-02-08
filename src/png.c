@@ -132,11 +132,11 @@ int png_inflate_image (struct png_info *p)
 		return 0;
 	}
 
-	if (uncompress(p->fimage, &fbuff_size, p->zimage, p->zlength) != Z_OK)
+	/*if (uncompress(p->fimage, &fbuff_size, p->zimage, p->zlength) != Z_OK)
 	{
 		logerror("Error while inflating image\n");
 		return 0;
-	}
+	}*/
 
 	free (p->zimage);
 	return 1;
@@ -701,11 +701,11 @@ int png_deflate_image(struct png_info *p)
 		return 0;
 	}
 
-	if (compress(p->zimage, &zbuff_size, p->fimage, p->height*(p->rowbytes+1)) != Z_OK)
+	/*if (compress(p->zimage, &zbuff_size, p->fimage, p->height*(p->rowbytes+1)) != Z_OK)
 	{
 		logerror("Error while deflating image\n");
 		return 0;
-	}
+	}*/
 	p->zlength = zbuff_size;
 
 	return 1;

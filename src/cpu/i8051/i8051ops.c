@@ -956,5 +956,5 @@ INLINE void xrl_a_r(int r)
 //illegal opcodes
 INLINE void illegal(void)
 {
-	LOG(("i8051 #%d: illegal opcode at 0x%03x: %02x\n", cpu_getactivecpu(), PC, ROP(PC)));
+	/*LOG(("i8051 #%d: illegal opcode at 0x%03x: %02x\n", cpu_getactivecpu(), PC, ROP(PC)));*/
 }

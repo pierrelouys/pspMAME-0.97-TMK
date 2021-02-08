@@ -208,7 +208,7 @@ INLINE void m6502_take_irq(void)
 		P |= F_I;		/* set I flag */
 		PCL = RDMEM(EAD);
 		PCH = RDMEM(EAD+1);
-		LOG(("M6502#%d takes IRQ ($%04x)\n", cpu_getactivecpu(), PCD));
+		//LOG(("M6502#%d takes IRQ ($%04x)\n", cpu_getactivecpu(), PCD));
 		/* call back the cpuintrf to let it clear the line */
 		if (m6502.irq_callback) (*m6502.irq_callback)(0);
 		change_pc(PCD);
@@ -251,16 +251,16 @@ static int m6502_execute(int cycles)
 		/* check if the I flag was just reset (interrupts enabled) */
 		if( m6502.after_cli )
 		{
-			LOG(("M6502#%d after_cli was >0", cpu_getactivecpu()));
+			//LOG(("M6502#%d after_cli was >0", cpu_getactivecpu()));
 			m6502.after_cli = 0;
 			if (m6502.irq_state != CLEAR_LINE)
 			{
-				LOG((": irq line is asserted: set pending IRQ\n"));
+				//LOG((": irq line is asserted: set pending IRQ\n"));
 				m6502.pending_irq = 1;
 			}
 			else
 			{
-				LOG((": irq line is clear\n"));
+				//LOG((": irq line is clear\n"));
 			}
 		}
 		else
@@ -280,7 +280,7 @@ static void m6502_set_irq_line(int irqline, int state)
 		m6502.nmi_state = state;
 		if( state != CLEAR_LINE )
 		{
-			LOG(( "M6502#%d set_nmi_line(ASSERT)\n", cpu_getactivecpu()));
+			//LOG(( "M6502#%d set_nmi_line(ASSERT)\n", cpu_getactivecpu()));
 			EAD = M6502_NMI_VEC;
 			m6502_ICount -= 7;
 			PUSH(PCH);
@@ -289,7 +289,7 @@ static void m6502_set_irq_line(int irqline, int state)
 			P |= F_I;		/* set I flag */
 			PCL = RDMEM(EAD);
 			PCH = RDMEM(EAD+1);
-			LOG(("M6502#%d takes NMI ($%04x)\n", cpu_getactivecpu(), PCD));
+			//LOG(("M6502#%d takes NMI ($%04x)\n", cpu_getactivecpu(), PCD));
 			change_pc(PCD);
 		}
 	}
@@ -299,7 +299,7 @@ static void m6502_set_irq_line(int irqline, int state)
 		{
 			if( m6502.so_state && !state )
 			{
-				LOG(( "M6502#%d set overflow\n", cpu_getactivecpu()));
+				//LOG(( "M6502#%d set overflow\n", cpu_getactivecpu()));
 				P|=F_V;
 			}
 			m6502.so_state=state;
@@ -308,7 +308,7 @@ static void m6502_set_irq_line(int irqline, int state)
 		m6502.irq_state = state;
 		if( state != CLEAR_LINE )
 		{
-			LOG(( "M6502#%d set_irq_line(ASSERT)\n", cpu_getactivecpu()));
+			//LOG(( "M6502#%d set_irq_line(ASSERT)\n", cpu_getactivecpu()));
 			m6502.pending_irq = 1;
 		}
 	}
@@ -416,7 +416,7 @@ INLINE void m65c02_take_irq(void)
 		P = (P & ~F_D) | F_I;		/* knock out D and set I flag */
 		PCL = RDMEM(EAD);
 		PCH = RDMEM(EAD+1);
-		LOG(("M65c02#%d takes IRQ ($%04x)\n", cpu_getactivecpu(), PCD));
+		//LOG(("M65c02#%d takes IRQ ($%04x)\n", cpu_getactivecpu(), PCD));
 		/* call back the cpuintrf to let it clear the line */
 		if (m6502.irq_callback) (*m6502.irq_callback)(0);
 		change_pc(PCD);
@@ -448,16 +448,16 @@ static int m65c02_execute(int cycles)
 		/* check if the I flag was just reset (interrupts enabled) */
 		if( m6502.after_cli )
 		{
-			LOG(("M6502#%d after_cli was >0", cpu_getactivecpu()));
+			//LOG(("M6502#%d after_cli was >0", cpu_getactivecpu()));
 			m6502.after_cli = 0;
 			if (m6502.irq_state != CLEAR_LINE)
 			{
-				LOG((": irq line is asserted: set pending IRQ\n"));
+				//LOG((": irq line is asserted: set pending IRQ\n"));
 				m6502.pending_irq = 1;
 			}
 			else
 			{
-				LOG((": irq line is clear\n"));
+				//LOG((": irq line is clear\n"));
 			}
 		}
 		else
@@ -477,7 +477,7 @@ static void m65c02_set_irq_line(int irqline, int state)
 		m6502.nmi_state = state;
 		if( state != CLEAR_LINE )
 		{
-			LOG(( "M6502#%d set_nmi_line(ASSERT)\n", cpu_getactivecpu()));
+			//LOG(( "M6502#%d set_nmi_line(ASSERT)\n", cpu_getactivecpu()));
 			EAD = M6502_NMI_VEC;
 			m6502_ICount -= 7;
 			PUSH(PCH);
@@ -486,7 +486,7 @@ static void m65c02_set_irq_line(int irqline, int state)
 			P = (P & ~F_D) | F_I;		/* knock out D and set I flag */
 			PCL = RDMEM(EAD);
 			PCH = RDMEM(EAD+1);
-			LOG(("M6502#%d takes NMI ($%04x)\n", cpu_getactivecpu(), PCD));
+			//LOG(("M6502#%d takes NMI ($%04x)\n", cpu_getactivecpu(), PCD));
 			change_pc(PCD);
 		}
 	}
@@ -551,7 +551,7 @@ INLINE void deco16_take_irq(void)
 		P |= F_I;		/* set I flag */
 		PCL = RDMEM(EAD+1);
 		PCH = RDMEM(EAD);
-		LOG(("M6502#%d takes IRQ ($%04x)\n", cpu_getactivecpu(), PCD));
+		//LOG(("M6502#%d takes IRQ ($%04x)\n", cpu_getactivecpu(), PCD));
 		/* call back the cpuintrf to let it clear the line */
 		if (m6502.irq_callback) (*m6502.irq_callback)(0);
 		change_pc(PCD);
@@ -567,7 +567,7 @@ static void deco16_set_irq_line(int irqline, int state)
 		m6502.nmi_state = state;
 		if( state != CLEAR_LINE )
 		{
-			LOG(( "M6502#%d set_nmi_line(ASSERT)\n", cpu_getactivecpu()));
+			//LOG(( "M6502#%d set_nmi_line(ASSERT)\n", cpu_getactivecpu()));
 			EAD = DECO16_NMI_VEC;
 			m6502_ICount -= 7;
 			PUSH(PCH);
@@ -576,7 +576,7 @@ static void deco16_set_irq_line(int irqline, int state)
 			P |= F_I;		/* set I flag */
 			PCL = RDMEM(EAD+1);
 			PCH = RDMEM(EAD);
-			LOG(("M6502#%d takes NMI ($%04x)\n", cpu_getactivecpu(), PCD));
+			//LOG(("M6502#%d takes NMI ($%04x)\n", cpu_getactivecpu(), PCD));
 			change_pc(PCD);
 		}
 	}
@@ -586,7 +586,7 @@ static void deco16_set_irq_line(int irqline, int state)
 		{
 			if( m6502.so_state && !state )
 			{
-				LOG(( "M6502#%d set overflow\n", cpu_getactivecpu()));
+				//LOG(( "M6502#%d set overflow\n", cpu_getactivecpu()));
 				P|=F_V;
 			}
 			m6502.so_state=state;
@@ -595,7 +595,7 @@ static void deco16_set_irq_line(int irqline, int state)
 		m6502.irq_state = state;
 		if( state != CLEAR_LINE )
 		{
-			LOG(( "M6502#%d set_irq_line(ASSERT)\n", cpu_getactivecpu()));
+			//LOG(( "M6502#%d set_irq_line(ASSERT)\n", cpu_getactivecpu()));
 			m6502.pending_irq = 1;
 		}
 	}
@@ -625,16 +625,16 @@ static int deco16_execute(int cycles)
 		/* check if the I flag was just reset (interrupts enabled) */
 		if( m6502.after_cli )
 		{
-			LOG(("M6502#%d after_cli was >0", cpu_getactivecpu()));
+			//LOG(("M6502#%d after_cli was >0", cpu_getactivecpu()));
 			m6502.after_cli = 0;
 			if (m6502.irq_state != CLEAR_LINE)
 			{
-				LOG((": irq line is asserted: set pending IRQ\n"));
+				//LOG((": irq line is asserted: set pending IRQ\n"));
 				m6502.pending_irq = 1;
 			}
 			else
 			{
-				LOG((": irq line is clear\n"));
+				//LOG((": irq line is clear\n"));
 			}
 		}
 		else

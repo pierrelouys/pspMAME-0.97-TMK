@@ -100,7 +100,7 @@ static WRITE8_HANDLER(sfr_write);
 static WRITE8_HANDLER( bit_address_w );
 static READ8_HANDLER( bit_address_r );
 
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 static READ8_HANDLER(i8052_internal_ram_iread);
 static WRITE8_HANDLER(i8052_internal_ram_iwrite);
 #endif
@@ -148,7 +148,7 @@ typedef struct {
 	UINT8	p3;				//Port 3
 	UINT8	ip;				//Interrupt Priority
 	//8052 Only registers
-	#if (HAS_I8052 || HAS_I8752)
+	#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 		UINT8	t2con;		//Timer/Counter 2 Control
 		UINT8	rcap2l;		//Timer/Counter 2 Capture Register Lo
 		UINT8	rcap2h;		//Timer/Counter 2 Capture Register Hi
@@ -279,7 +279,7 @@ static READ32_HANDLER((*hold_eram_iaddr_callback));
 #define SET_P(n)		R_PSW = (R_PSW & 0xfe) | (n<<0);	//Parity Flag
 /*IE Flags*/
 #define SET_EA(n)		R_IE = (R_IE & 0x7f) | (n<<7);		//Global Interrupt Enable/Disable
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
    #define SET_ET2(n)		R_IE = (R_IE & 0xdf) | (n<<5);	//Timer 2 Interrupt Enable/Disable
 #endif
 #define SET_ES(n)		R_IE = (R_IE & 0xef) | (n<<4);		//Serial Interrupt Enable/Disable
@@ -288,7 +288,7 @@ static READ32_HANDLER((*hold_eram_iaddr_callback));
 #define SET_ET0(n)		R_IE = (R_IE & 0xfd) | (n<<1);		//Timer 0 Interrupt Enable/Disable
 #define SET_EX0(n)		R_IE = (R_IE & 0xfe) | (n<<0);		//External Int 0 Interrupt Enable/Disable
 /*IP Flags*/
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
    #define SET_PT2(n)		R_IP = (R_IP & 0xdf) | (n<<5);	//Set Timer 2 Priority Level
 #endif
 #define SET_PS0(n)		R_IP = (R_IP & 0xef) | (n<<4);		//Set Serial Priority Level
@@ -324,7 +324,7 @@ static READ32_HANDLER((*hold_eram_iaddr_callback));
 #define SET_M0_1(n)		R_TMOD = (R_TMOD & 0xfd) | (n<<1);  //Timer 0 Timer Mode Bit 1
 #define SET_M0_0(n)		R_TMOD = (R_TMOD & 0xfe) | (n<<0);  //Timer 0 Timer Mode Bit 0
 
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
   /*T2CON Flags*/
   #define SET_TF2(n)		R_T2CON = (R_T2CON & 0x7f) | (n<<7);	//Indicated Timer 2 Overflow Int Triggered
   #define SET_EXF2(n)		R_T2CON = (R_T2CON & 0xbf) | (n<<6);	//Indicates Timer 2 External Flag
@@ -355,7 +355,7 @@ static READ32_HANDLER((*hold_eram_iaddr_callback));
 #define GET_ET0			((R_IE & 0x02)>>1)
 #define GET_EX0			((R_IE & 0x01)>>0)
 /*IP Flags*/
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
   #define GET_PT2			((R_IP & 0x20)>>5)
 #endif
 #define GET_PS			((R_IP & 0x10)>>4)
@@ -391,7 +391,7 @@ static READ32_HANDLER((*hold_eram_iaddr_callback));
 #define GET_M0_1		((R_TMOD & 0x02)>>1)
 #define GET_M0_0		((R_TMOD & 0x01)>>0)
 
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
   /*T2CON Flags*/
   #define GET_TF2			((R_T2CON & 0x80)>>7)
   #define GET_EXF2			((R_T2CON & 0x40)>>6)
@@ -419,14 +419,14 @@ static READ32_HANDLER((*hold_eram_iaddr_callback));
 #define V_TF1	0x01b	/* Timer 1 Overflow */
 #define V_RITI	0x023	/* Serial Receive/Transmit */
 
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 #define V_TF2	0x02b	/* Timer 2 Overflow */
 #endif
 
 /* Any pending IRQ */
 #define SERIALPORT_IRQ    ((R_SCON & 0x03) && GET_ES)
 
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 #define NO_PENDING_IRQ  !(R_TCON & 0xaa) && !(SERIALPORT_IRQ) && !GET_TF2 && !GET_EXF2
 #else
 #define NO_PENDING_IRQ  !(R_TCON & 0xaa) && !(SERIALPORT_IRQ)
@@ -464,7 +464,7 @@ static READ32_HANDLER((*hold_eram_iaddr_callback));
 #define R_P3	i8051.p3
 #define R_IP	i8051.ip
 //8052 Only registers
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
   #define R_T2CON	i8051.t2con
   #define R_RCAP2L	i8051.rcap2l
   #define R_RCAP2H	i8051.rcap2h
@@ -528,7 +528,7 @@ void i8051_init(void)
 	state_save_register_UINT8 ("i8051", cpu, "P3",        &i8051.p3,     1);
 	state_save_register_UINT8 ("i8051", cpu, "IP",        &i8051.ip,     1);
 	//8052 Only registers
-	#if (HAS_I8052 || HAS_I8752)
+	#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 		state_save_register_UINT8 ("i8051", cpu, "T2CON", &i8051.tcon,   1);
 		state_save_register_UINT8 ("i8051", cpu, "RCAP2L",&i8051.rcap2l, 1);
 		state_save_register_UINT8 ("i8051", cpu, "RCAP2H",&i8051.rcap2h, 1);
@@ -1516,7 +1516,7 @@ INLINE UINT8 check_interrupts(void)
 		i8051.int_vec = V_RITI;
 		i8051.priority_request = GET_PS;
 	}
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 	//Timer 2 overflow (Either Timer Overflow OR External Interrupt)
 	if(!i8051.priority_request && (GET_TF2 || GET_EXF2) && (!i8051.int_vec || (i8051.int_vec && GET_PT2))) {
 		//Set vector & priority level request
@@ -1527,7 +1527,7 @@ INLINE UINT8 check_interrupts(void)
 
 	//Skip the interrupt request if currently processing is lo priority, and the new request IS NOT HI PRIORITY!
 	if(i8051.cur_irq < 0xff && !i8051.priority_request)
-		{ LOG(("low priority irq in progress already, skipping low irq request\n")); return 0; }
+		{ /*LOG(("low priority irq in progress already, skipping low irq request\n"));*/ return 0; }
 
     /*** --- Perform the interrupt --- ***/
 
@@ -1632,7 +1632,7 @@ static WRITE8_HANDLER(sfr_write)
 
 		case SP:
 			if(offset > 0xff)
-				LOG(("i8051 #%d: attemping to write value to SP past 256 bytes at 0x%04x\n", cpu_getactivecpu(), PC));
+				/*LOG(("i8051 #%d: attemping to write value to SP past 256 bytes at 0x%04x\n", cpu_getactivecpu(), PC))*/;
 			R_SP = data&0xff; //keep sp w/in 256 bytes
 			break;
 
@@ -1677,7 +1677,7 @@ static WRITE8_HANDLER(sfr_write)
 		case IP:		R_IP  = data; break;
 
 	//8052 Only registers
-	#if (HAS_I8052 || HAS_I8752)
+	#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 		case T2CON:		R_T2CON = data; break;
 		case RCAP2L:	R_RCAP2L = data; break;
 		case RCAP2H:	R_RCAP2H = data; break;
@@ -1699,7 +1699,7 @@ static WRITE8_HANDLER(sfr_write)
 
 		/* Illegal or non-implemented sfr */
 		default:
-			LOG(("i8051 #%d: attemping to write to an invalid/non-implemented SFR address: %x at 0x%04x, data=%x\n", cpu_getactivecpu(), offset,PC,data));
+			/*LOG(("i8051 #%d: attemping to write to an invalid/non-implemented SFR address: %x at 0x%04x, data=%x\n", cpu_getactivecpu(), offset,PC,data))*/;
 	}
 }
 
@@ -1743,7 +1743,7 @@ static READ8_HANDLER(sfr_read)
 				return IN(3);					//Read from actual port
 		case IP:		return R_IP;
 	//8052 Only registers
-	#if (HAS_I8052 || HAS_I8752)
+	#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 		case T2CON:		return R_T2CON;
 		case RCAP2L:	return R_RCAP2L;
 		case RCAP2H:	return R_RCAP2H;
@@ -1756,7 +1756,7 @@ static READ8_HANDLER(sfr_read)
 
 		/* Illegal or non-implemented sfr */
 		default:
-			LOG(("i8051 #%d: attemping to read an invalid/non-implemented SFR address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC));
+			/*LOG(("i8051 #%d: attemping to read an invalid/non-implemented SFR address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC))*/;
 	}
 	return 0xff;
 }
@@ -1771,7 +1771,7 @@ static READ8_HANDLER(internal_ram_read)
 		if (offset < 0x100)
 			return SFR_R(offset);
 		else
-			LOG(("i8051 #%d: attemping to read from an invalid Internal Ram address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC));
+			/*LOG(("i8051 #%d: attemping to read from an invalid Internal Ram address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC))*/;
 	}
 	return 0xff;
 }
@@ -1787,7 +1787,7 @@ static WRITE8_HANDLER(internal_ram_write)
 		if (offset < 0x100)
 			SFR_W(offset,data);
 		else
-			LOG(("i8051 #%d: attemping to write to invalid Internal Ram address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC));
+			/*LOG(("i8051 #%d: attemping to write to invalid Internal Ram address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC))*/;
 	}
 }
 
@@ -2112,7 +2112,7 @@ INLINE void update_timer(int cyc)
 		}
 	}
 
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
 	//Update Timer 2
 	if(GET_TR2) {
 		int timerinc, overflow, isoverflow;
@@ -2187,7 +2187,7 @@ INLINE void serial_transmit(UINT8 data)
 		//9 bit uart
 		case 2:
 		case 3:
-			LOG(("Serial mode 2 & 3 not supported in i8051!\n"));
+			//LOG(("Serial mode 2 & 3 not supported in i8051!\n"));
 			break;
 	}
 }
@@ -2235,7 +2235,7 @@ INLINE void	update_serial(int cyc)
 /****************************************************************************
  * 8752 Section
  ****************************************************************************/
-#if (HAS_I8752)
+#if (HAS_I8752 || HAS_I8752_ORIG)
 void i8752_init (void)										{ i8051_init(); }
 void i8752_reset (void *param)
 {
@@ -2363,7 +2363,7 @@ static READ8_HANDLER(i8052_internal_ram_iread)
 	if (offset < 0x100)
 		return i8051.IntRam[offset];
 	else
-		LOG(("i8051 #%d: attemping to read from an invalid Internal Ram address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC));
+		/*LOG(("i8051 #%d: attemping to read from an invalid Internal Ram address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC))*/;
 	return 0xff;
 }
 
@@ -2375,7 +2375,7 @@ static WRITE8_HANDLER(i8052_internal_ram_iwrite)
 	if (offset < 0x100)
 		i8051.IntRam[offset] = data;
 	else
-		LOG(("i8051 #%d: attemping to write to an invalid Internal Ram address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC));
+		/*LOG(("i8051 #%d: attemping to write to an invalid Internal Ram address: %x at 0x%04x\n", cpu_getactivecpu(), offset,PC))*/;
 }
 
 #endif	//(HAS_8752)

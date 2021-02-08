@@ -170,7 +170,7 @@ static WRITE8_HANDLER( dotron_port_4_w )
 	/* light control is in the top 2 bits */
 	set_led_status(0, data & 0x40);		/* background light */
 	set_led_status(1, data & 0x80);		/* strobe */
-	artwork_show("backdrop", (data >> 6) & 1);
+	//artwork_show("backdrop", (data >> 6) & 1);
 
 	/* low 5 bits go to control the Squawk & Talk */
 	squawkntalk_data_w(offset, data);
@@ -386,7 +386,7 @@ static WRITE8_HANDLER( spyhunt_port_4_w )
 			"lamp0", "lamp1", "lamp2", "lamp3",
 			"lamp4", "lamp5", "lamp6", "lamp7"
 		};
-		artwork_show(lampname[data & 7], (data >> 3) & 1);
+		//artwork_show(lampname[data & 7], (data >> 3) & 1);
 	}
 
 	/* low 5 bits go to control the Chip Squeak Deluxe */

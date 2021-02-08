@@ -424,7 +424,6 @@ void *auto_malloc(size_t size);
 char *auto_strdup(const char *str);
 struct mame_bitmap *auto_bitmap_alloc(int width,int height);
 struct mame_bitmap *auto_bitmap_alloc_depth(int width,int height,int depth);
-struct mame_bitmap *auto_bitmap_alloc_depth_vram(int width,int height,int depth);
 
 /*
   Save a screen shot of the game display. It is suggested to use the core

@@ -1125,21 +1125,21 @@ INLINE void execute_one(int opcode)
 			/* reset serviced IRQ */
 			I.ISRV = 0;
 			if( I.irq_state[0] != CLEAR_LINE ) {
-				LOG(("i8085 EI sets INTR\n"));
+				//LOG(("i8085 EI sets INTR\n"));
 				I.IREQ |= IM_INTR;
 				I.INTR = I8085_INTR;
 			}
 			if( I.cputype ) {
 				if( I.irq_state[1] != CLEAR_LINE ) {
-					LOG(("i8085 EI sets RST5.5\n"));
+					//LOG(("i8085 EI sets RST5.5\n"));
 					I.IREQ |= IM_RST55;
 				}
 				if( I.irq_state[2] != CLEAR_LINE ) {
-					LOG(("i8085 EI sets RST6.5\n"));
+					//LOG(("i8085 EI sets RST6.5\n"));
 					I.IREQ |= IM_RST65;
 				}
 				if( I.irq_state[3] != CLEAR_LINE ) {
-					LOG(("i8085 EI sets RST7.5\n"));
+					//LOG(("i8085 EI sets RST7.5\n"));
 					I.IREQ |= IM_RST75;
 				}
 				/* find highest priority IREQ flag with
@@ -1204,7 +1204,7 @@ static void Interrupt(void)
 
 	if( I.ISRV == IM_INTR )
 	{
-		LOG(("Interrupt get INTR vector\n"));
+		//LOG(("Interrupt get INTR vector\n"));
 		I.IRQ1 = (I.irq_callback)(0);
 	}
 
@@ -1212,14 +1212,14 @@ static void Interrupt(void)
 	{
 		if( I.ISRV == IM_RST55 )
 		{
-			LOG(("Interrupt get RST5.5 vector\n"));
+			//LOG(("Interrupt get RST5.5 vector\n"));
 			//I.IRQ1 = (I.irq_callback)(1);
 			I.irq_state[I8085_RST55_LINE] = CLEAR_LINE; //AT: processing RST5.5, reset interrupt line
 		}
 
 		if( I.ISRV == IM_RST65	)
 		{
-			LOG(("Interrupt get RST6.5 vector\n"));
+			//LOG(("Interrupt get RST6.5 vector\n"));
 			//I.IRQ1 = (I.irq_callback)(2);
 			I.irq_state[I8085_RST65_LINE] = CLEAR_LINE; //AT: processing RST6.5, reset interrupt line
 		}

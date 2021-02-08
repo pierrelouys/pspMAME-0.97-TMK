@@ -91,7 +91,7 @@ void m68008_get_info(UINT32 state, union cpuinfo *info);
 /****************************************************************************
  * M68010 section
  ****************************************************************************/
-#if HAS_M68010
+#if HAS_M68010_ORIG
 #define MC68010_IRQ_1					MC68000_IRQ_1
 #define MC68010_IRQ_2					MC68000_IRQ_2
 #define MC68010_IRQ_3					MC68000_IRQ_3
@@ -108,7 +108,7 @@ void m68010_get_info(UINT32 state, union cpuinfo *info);
 /****************************************************************************
  * M68EC020 section
  ****************************************************************************/
-#if HAS_M68EC020
+#if (HAS_M68EC020 || HAS_M68EC020_ORIG)
 #define MC68EC020_IRQ_1					MC68000_IRQ_1
 #define MC68EC020_IRQ_2					MC68000_IRQ_2
 #define MC68EC020_IRQ_3					MC68000_IRQ_3
@@ -125,7 +125,7 @@ void m68ec020_get_info(UINT32 state, union cpuinfo *info);
 /****************************************************************************
  * M68020 section
  ****************************************************************************/
-#if HAS_M68020
+#if (HAS_M68020)
 #define MC68020_IRQ_1					MC68000_IRQ_1
 #define MC68020_IRQ_2					MC68000_IRQ_2
 #define MC68020_IRQ_3					MC68000_IRQ_3

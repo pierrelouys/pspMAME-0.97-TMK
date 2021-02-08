@@ -895,11 +895,11 @@ static MACHINE_DRIVER_START( ddragon )
  	MDRV_CPU_ADD(HD6309, 3579545)	/* 3.579545 MHz */
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_VBLANK_INT(ddragon_interrupt,272)
-
+                           //3579545 / 3
 	MDRV_CPU_ADD(HD63701, 3579545 / 3) /* This divider seems correct by comparison to real board */
 	MDRV_CPU_PROGRAM_MAP(sub_readmem,sub_writemem)
 
- 	MDRV_CPU_ADD(HD6309, 3579545)
+ 	MDRV_CPU_ADD(HD6309, 3579545)//3579545
  	/* audio CPU */
 	MDRV_CPU_PROGRAM_MAP(sound_readmem,sound_writemem)
 
@@ -922,7 +922,7 @@ static MACHINE_DRIVER_START( ddragon )
 	/* sound hardware */
 	MDRV_SPEAKER_STANDARD_MONO("mono")
 
-	MDRV_SOUND_ADD(YM2151, 3579545)
+	MDRV_SOUND_ADD(YM2151, 3579545)//3500000
 	MDRV_SOUND_CONFIG(ym2151_interface)
 	MDRV_SOUND_ROUTE(0, "mono", 0.60)
 	MDRV_SOUND_ROUTE(1, "mono", 0.60)
@@ -989,14 +989,14 @@ MACHINE_DRIVER_END
 static MACHINE_DRIVER_START( ddragonb )
 
 	/* basic machine hardware */
- 	MDRV_CPU_ADD(HD6309, 3579545)	/* 3.579545 MHz */
+ 	MDRV_CPU_ADD(HD6309, 3.579545)	/* 3.579545 MHz */
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_VBLANK_INT(ddragon_interrupt,272)
 
- 	MDRV_CPU_ADD(HD6309, 12000000 / 3) /* 4 MHz */
+ 	MDRV_CPU_ADD(HD6309, 12000000 / 3 + 1000000) /* 4 MHz */
 	MDRV_CPU_PROGRAM_MAP(sub_readmem,sub_writemem)
 
- 	MDRV_CPU_ADD(HD6309, 3579545)
+ 	MDRV_CPU_ADD(HD6309, 3.579545)//3579545
  	/* audio CPU */	/* ? */
 	MDRV_CPU_PROGRAM_MAP(sound_readmem,sound_writemem)
 
@@ -1040,10 +1040,10 @@ static MACHINE_DRIVER_START( ddragon2 )
 	MDRV_CPU_PROGRAM_MAP(dd2_readmem,dd2_writemem)
 	MDRV_CPU_VBLANK_INT(ddragon_interrupt,272)
 
-	MDRV_CPU_ADD(Z80,12000000 / 3) /* 4 MHz */
+	MDRV_CPU_ADD(Z80,12000000 / 3 + 1000000) /* 4 MHz */
 	MDRV_CPU_PROGRAM_MAP(dd2_sub_readmem,dd2_sub_writemem)
 
-	MDRV_CPU_ADD(Z80, 3579545)
+	MDRV_CPU_ADD(Z80, 3579545)//3579545
 	/* audio CPU */	/* 3.579545 MHz */
 	MDRV_CPU_PROGRAM_MAP(dd2_sound_readmem,dd2_sound_writemem)
 
@@ -1066,7 +1066,7 @@ static MACHINE_DRIVER_START( ddragon2 )
 	/* sound hardware */
 	MDRV_SPEAKER_STANDARD_MONO("mono")
 
-	MDRV_SOUND_ADD(YM2151, 3579545)
+	MDRV_SOUND_ADD(YM2151, 3579545)//3579545
 	MDRV_SOUND_CONFIG(ym2151_interface)
 	MDRV_SOUND_ROUTE(0, "mono", 0.60)
 	MDRV_SOUND_ROUTE(1, "mono", 0.60)

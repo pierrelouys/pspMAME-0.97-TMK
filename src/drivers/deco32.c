@@ -1579,7 +1579,7 @@ static INTERRUPT_GEN( tattass_snd_interrupt )
 static MACHINE_DRIVER_START( captaven )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(ARM, 28000000/3)
+	MDRV_CPU_ADD(ARM, 28000000/4)
 	MDRV_CPU_PROGRAM_MAP(captaven_readmem,captaven_writemem)
 	MDRV_CPU_VBLANK_INT(deco32_vbl_interrupt,1)
 

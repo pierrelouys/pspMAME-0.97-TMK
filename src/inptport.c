@@ -933,7 +933,7 @@ int load_input_port_settings(void)
 
 	/* start with the raw defaults and ask the OSD to customize them in the backup array */
 	memcpy(inputport_list_backup, inputport_list_defaults, sizeof(inputport_list_backup));
-	osd_customize_inputport_list(inputport_list_backup);
+	//osd_customize_inputport_list(inputport_list_backup);
 
 	/* load the controller-specific info -- note that even though we are still modifying */
 	/* the inputport_list_backup, token_to_port_type relies on inputport_list being valid */

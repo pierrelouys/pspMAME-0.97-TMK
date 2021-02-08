@@ -240,7 +240,7 @@ static const struct GfxLayout uifontlayout =
 
 INLINE void ui_markdirty(const struct rectangle *rect)
 {
-	artwork_mark_ui_dirty(rect->min_x, rect->min_y, rect->max_x, rect->max_y);
+	//artwork_mark_ui_dirty(rect->min_x, rect->min_y, rect->max_x, rect->max_y);
 	ui_dirty = 5;
 }
 
@@ -256,7 +256,10 @@ static void ui_raw2rot_rect(struct rectangle *rect)
 	int temp, w, h;
 
 	/* get the effective screen size, including artwork */
-	artwork_get_screensize(&w, &h);
+	//artwork_get_screensize(&w, &h);
+
+    w = Machine->drv->screen_width;
+    h = Machine->drv->screen_height;
 
 	/* apply X flip */
 	if (Machine->ui_orientation & ORIENTATION_FLIP_X)
@@ -294,7 +297,10 @@ static void ui_rot2raw_rect(struct rectangle *rect)
 	int temp, w, h;
 
 	/* get the effective screen size, including artwork */
-	artwork_get_screensize(&w, &h);
+	//artwork_get_screensize(&w, &h);
+
+    w = Machine->drv->screen_width;
+    h = Machine->drv->screen_height;
 
 	/* apply X/Y swap first */
 	if (Machine->ui_orientation & ORIENTATION_SWAP_XY)
@@ -2116,7 +2122,7 @@ static int calibratejoysticks(struct mame_bitmap *bitmap,int selected)
 
 	if (calibration_started == 0)
 	{
-		osd_joystick_start_calibration();
+		//osd_joystick_start_calibration();
 		calibration_started = 1;
 		strcpy (buf, "");
 	}
@@ -2130,7 +2136,7 @@ static int calibratejoysticks(struct mame_bitmap *bitmap,int selected)
 		}
 		else if (input_ui_pressed(IPT_UI_SELECT))
 		{
-			osd_joystick_calibrate();
+			//osd_joystick_calibrate();
 			sel &= SEL_MASK;
 		}
 
@@ -2138,12 +2144,12 @@ static int calibratejoysticks(struct mame_bitmap *bitmap,int selected)
 	}
 	else
 	{
-		msg = osd_joystick_calibrate_next();
+		msg = 0;//osd_joystick_calibrate_next();
 		schedule_full_refresh();
 		if (msg == 0)
 		{
 			calibration_started = 0;
-			osd_joystick_end_calibration();
+			//osd_joystick_end_calibration();
 			sel = -1;
 		}
 		else
@@ -2456,7 +2462,7 @@ int showcopyright(struct mame_bitmap *bitmap)
 
 	setup_selected = -1;////
 	done = 0;
-	
+
 	do
 	{
 		erase_screen(bitmap);
@@ -2464,7 +2470,6 @@ int showcopyright(struct mame_bitmap *bitmap)
 		ui_displaymessagewindow(bitmap,buf);
 
 		update_video_and_audio();
-		psp_gu_drawsync();	//TMK
 		if (input_ui_pressed(IPT_UI_CANCEL))
 		{
 			setup_selected = 0;////
@@ -2754,10 +2759,8 @@ int showgamewarnings(struct mame_bitmap *bitmap)
 			ui_displaymessagewindow(bitmap,buf);
 
 			update_video_and_audio();
-			psp_gu_drawsync(); //TMK
-			if (input_ui_pressed(IPT_UI_CANCEL)) {
+			if (input_ui_pressed(IPT_UI_CANCEL))
 				return 1;
-			}
 			if (code_pressed_memory(KEYCODE_O) ||
 					input_ui_pressed(IPT_UI_LEFT))
 				done = 1;
@@ -2765,7 +2768,6 @@ int showgamewarnings(struct mame_bitmap *bitmap)
 					input_ui_pressed(IPT_UI_RIGHT)))
 				done = 2;
 		} while (done < 2);
-
 	}
 
 	erase_screen(bitmap);
@@ -2783,7 +2785,6 @@ int showgameinfo(struct mame_bitmap *bitmap)
 	while (displaygameinfo(bitmap,0) == 1)
 	{
 		update_video_and_audio();
-		psp_gu_drawsync(); //TMK
 	}
 
 	#ifdef MESS
@@ -3203,7 +3204,7 @@ int memcard_menu(struct mame_bitmap *bitmap, int selection)
 #ifndef MESS
 enum { UI_SWITCH = 0,UI_DEFGROUP,UI_CODE,UI_ANALOG,UI_CALIBRATE,
 		UI_STATS,UI_GAMEINFO, UI_HISTORY,
-		UI_CHEAT,UI_RESET,UI_MEMCARD,UI_EXIT };
+		UI_CHEAT,UI_RESET,UI_MEMCARD,UI_EXIT/*,UI_QUIT_GAME*/ };
 #else
 enum { UI_SWITCH = 0,UI_DEFGROUP,UI_CODE,UI_ANALOG,UI_CALIBRATE,
 		UI_GAMEINFO, UI_IMAGEINFO,UI_FILEMANAGER,UI_TAPECONTROL,
@@ -3311,10 +3312,10 @@ static void setup_menu_init(void)
 		append_menu(UI_analogcontrols, UI_ANALOG);
 
   	/* Joystick calibration possible? */
-  	if ((osd_joystick_needs_calibration()) != 0)
+  	/*if ((osd_joystick_needs_calibration()) != 0)
 	{
 		append_menu(UI_calibrate, UI_CALIBRATE);
-	}
+	}*/
 
 #ifndef MESS
 	append_menu(UI_bookkeeping, UI_STATS);
@@ -3345,6 +3346,7 @@ static void setup_menu_init(void)
 
 	append_menu(UI_resetgame, UI_RESET);
 	append_menu(UI_returntogame, UI_EXIT);
+	//append_menu(UIstr_quit_emulator, UI_QUIT_GAME);
 	menu_item[menu_total] = 0; /* terminate array */
 }
 
@@ -3375,9 +3377,9 @@ static int setup_menu(struct mame_bitmap *bitmap, int selected)
 			case UI_ANALOG:
 				res = settraksettings(bitmap, sel >> SEL_BITS);
 				break;
-			case UI_CALIBRATE:
-				res = calibratejoysticks(bitmap, sel >> SEL_BITS);
-				break;
+			//case UI_CALIBRATE:
+				//res = calibratejoysticks(bitmap, sel >> SEL_BITS);
+				//break;
 #ifndef MESS
 			case UI_STATS:
 				res = mame_stats(bitmap, sel >> SEL_BITS);
@@ -3408,9 +3410,9 @@ static int setup_menu(struct mame_bitmap *bitmap, int selected)
 			case UI_HISTORY:
 				res = displayhistory(bitmap, sel >> SEL_BITS);
 				break;
-			case UI_CHEAT:
+			/*case UI_CHEAT:
 				res = cheat_menu(bitmap, sel >> SEL_BITS);
-				break;
+				break;*/
 			case UI_MEMCARD:
 				res = memcard_menu(bitmap, sel >> SEL_BITS);
 				break;
@@ -3471,6 +3473,12 @@ static int setup_menu(struct mame_bitmap *bitmap, int selected)
 				menu_lastselected = 0;
 				sel = -1;
 				break;
+
+			/*case UI_QUIT_GAME:
+                menu_lastselected = 0;
+				sel = -1;
+				psp_loop = 1;
+                break;*/
 		}
 	}
 
@@ -3558,7 +3566,7 @@ static void onscrd_volume(struct mame_bitmap *bitmap,int increment,int arg)
 		attenuation += increment;
 		if (attenuation > 0) attenuation = 0;
 		if (attenuation < -32) attenuation = -32;
-		osd_set_mastervolume(attenuation);
+		//osd_set_mastervolume(attenuation);
 	}
 	attenuation = osd_get_mastervolume();
 
@@ -4135,7 +4143,7 @@ int handle_user_interface(struct mame_bitmap *bitmap)
 		save_screen_snapshot(bitmap);
 
 	/* This call is for the cheat, it must be called once a frame */
-	if (options.cheat) DoCheat(bitmap);
+	//if (options.cheat) DoCheat(bitmap);
 
 	/* if the user pressed ESC, stop the emulation */
 	/* but don't quit if the setup menu is on screen */
@@ -4246,7 +4254,7 @@ int handle_user_interface(struct mame_bitmap *bitmap)
 				}
 			if (osd_selected != 0) osd_selected = on_screen_display(bitmap, osd_selected);
 
-			if (options.cheat) DisplayWatches(bitmap);
+			//if (options.cheat) DisplayWatches(bitmap);
 
 			/* show popup message if any */
 			if (messagecounter > 0)
@@ -4258,7 +4266,6 @@ int handle_user_interface(struct mame_bitmap *bitmap)
 			}
 
 			update_video_and_audio();
-			psp_gu_drawsync(); //TMK
 			reset_partial_updates();
 
 #ifdef MESS
@@ -4269,7 +4276,7 @@ int handle_user_interface(struct mame_bitmap *bitmap)
 			}
 #endif /* MESS */
 		}
-		
+
 		if (code_pressed(KEYCODE_LSHIFT) || code_pressed(KEYCODE_RSHIFT))
 			single_step = 1;
 		else

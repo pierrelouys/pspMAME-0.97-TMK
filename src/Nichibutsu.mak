@@ -94,5 +94,4 @@ $(OBJ)/shared.a: \
 
 
 # MAME specific core objs
-DESCJ =$(OBJ)/nichibutsu_descj.o
-COREOBJS += $(OBJ)/tiny.o $(OBJ)/cheat.o $(DESCJ)
+COREOBJS += $(OBJ)/tiny.o $(OBJ)/cheat.o

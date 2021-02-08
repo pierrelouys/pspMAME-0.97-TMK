@@ -9,7 +9,6 @@
  * function renaming will be added when neccessary
  * timing value should move to separate array
  */
-
 #undef ICOUNT
 
 #ifdef V20
@@ -2001,6 +2000,12 @@ static void PREFIX86(_wait)(void)    /* Opcode 0x9b */
             I.pc --;
         }
 }
+//repuken2
+/*#ifndef PUSH(val)
+
+#define PUSH(val) { I.regs.w[SP] -= 2; WriteWord(((I.base[SS] + I.regs.w[SP]) & AMASK), val); }
+
+#endif*/
 
 static void PREFIX86(_pushf)(void)    /* Opcode 0x9c */
 {

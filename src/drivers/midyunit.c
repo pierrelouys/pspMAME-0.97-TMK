@@ -1956,7 +1956,7 @@ ROM_END
  *  Game drivers
  *
  *************************************/
-
+/*	( YEAR	NAME	  PARENT	MACHINE   INPUT 	INIT	  MONITOR COMPANY  FULLNAME FLAGS ) */
 GAME( 1988, narc,     0,       zunit,    narc,    narc,     ROT0, "Williams", "Narc (rev 7.00)" )
 GAME( 1988, narc3,    narc,    zunit,    narc,    narc,     ROT0, "Williams", "Narc (rev 3.20)" )
 

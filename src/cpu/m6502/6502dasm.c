@@ -642,7 +642,7 @@ static const struct op6502_info opdeco16[256] =
  };
 #endif
 
-#if (HAS_M6502)
+#if (HAS_M6502 || HAS_M6502_ORIG)
 static unsigned m6502_get_reg(int reg) { union cpuinfo info; m6502_get_info(CPUINFO_INT_REGISTER + (reg), &info); return info.i; }
 #endif
 #if (HAS_M6509)

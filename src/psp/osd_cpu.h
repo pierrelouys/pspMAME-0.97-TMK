@@ -25,34 +25,37 @@
 #ifndef OSD_CPU_H
 #define OSD_CPU_H
 
-#ifdef __MWERKS__
-#define INLINE static inline
-#define __extension__
-#endif
-
-#ifdef _MSC_VER
-//#undef INLINE
+//#ifdef __MWERKS__
 //#define INLINE static inline
-#define strcasecmp stricmp
-#endif
+//#define __extension__
+//#endif
 
+//#ifdef _MSC_VER
+////#undef INLINE
+////#define INLINE static inline
+//#define strcasecmp stricmp
+//#endif
+
+//#include <psptypes.h>
+//typedef signed short						s16;
+//typedef signed int							s32;
 
 typedef unsigned char						UINT8;
 typedef signed char 						INT8;
 typedef unsigned short						UINT16;
 typedef signed short						INT16;
 
-#ifndef _WINDOWS_H
+//#ifndef _WINDOWS_H
 typedef unsigned int						UINT32;
 typedef signed int							INT32;
-#ifdef _MSC_VER
-typedef signed __int64						INT64;
-typedef unsigned __int64					UINT64;
-#else
+//#ifdef _MSC_VER
+//typedef signed __int64						INT64;
+//typedef unsigned __int64					UINT64;
+//#else
 __extension__ typedef unsigned long long	UINT64;
 __extension__ typedef signed long long		INT64;
-#endif
-#endif
+//#endif
+//#endif
 
 /* Combine two 32-bit integers into a 64-bit integer */
 #define COMBINE_64_32_32(A,B)     ((((UINT64)(A))<<32) | (UINT32)(B))
@@ -94,6 +97,6 @@ typedef union {
 	UINT32 d;
 }	PAIR;
 
-#define isunordered(x, y) __builtin_isunordered(x, y)
+//#define isunordered(x, y) __builtin_isunordered(x, y)
 
 #endif	/* defined OSD_CPU_H */

@@ -505,7 +505,7 @@ INLINE void WM16( UINT32 Addr, PAIR *p )
 /* IRQ enter */
 static void ENTER_INTERRUPT(const char *message,UINT16 irq_vector)
 {
-	LOG((message, cpu_getactivecpu()));
+	//LOG((message, cpu_getactivecpu()));
 	if( m6800.wai_state & (M6800_WAI|M6800_SLP) )
 	{
 		if( m6800.wai_state & M6800_WAI )
@@ -646,7 +646,7 @@ static void set_irq_line(int irqline, int state)
 	if (irqline == INPUT_LINE_NMI)
 	{
 		if (m6800.nmi_state == state) return;
-		LOG(("M6800#%d set_nmi_line %d \n", cpu_getactivecpu(), state));
+		//LOG(("M6800#%d set_nmi_line %d \n", cpu_getactivecpu(), state));
 		m6800.nmi_state = state;
 		if (state == CLEAR_LINE) return;
 
@@ -658,7 +658,7 @@ static void set_irq_line(int irqline, int state)
 		int eddge;
 
 		if (m6800.irq_state[irqline] == state) return;
-		LOG(("M6800#%d set_irq_line %d,%d\n", cpu_getactivecpu(), irqline, state));
+		//LOG(("M6800#%d set_irq_line %d,%d\n", cpu_getactivecpu(), irqline, state));
 		m6800.irq_state[irqline] = state;
 
 		switch(irqline)
@@ -1374,7 +1374,7 @@ ADDRESS_MAP_END
 /****************************************************************************
  * M6808 almost (fully?) equal to the M6800
  ****************************************************************************/
-#if (HAS_M6808)
+#if (HAS_M6808 || HAS_M6808_ORIG)
 static void m6808_init(void)
 {
 //  m6800.subtype = SUBTYPE_M6808;
@@ -2459,7 +2459,7 @@ void m6803_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if (HAS_M6808)
+#if (HAS_M6808 || HAS_M6808_ORIG)
 /**************************************************************************
  * CPU-specific set_info
  **************************************************************************/

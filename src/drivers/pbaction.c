@@ -420,7 +420,7 @@ static DRIVER_INIT( pbactio3 )
 	memory_install_read8_handler(0, ADDRESS_SPACE_PROGRAM, 0xc000, 0xc000, 0, 0, pbactio3_prot_kludge_r );
 }
 
-
+//rot90 original
 GAME( 1985, pbaction, 0,        pbaction, pbaction, 0,        ROT90, "Tehkan", "Pinball Action (set 1)" )
 GAME( 1985, pbactio2, pbaction, pbaction, pbaction, 0,        ROT90, "Tehkan", "Pinball Action (set 2)" )
 GAME( 1985, pbactio3, pbaction, pbaction, pbaction, pbactio3, ROT90, "Tehkan", "Pinball Action (set 3, encrypted)" )

@@ -137,13 +137,14 @@
 #include <stdarg.h>
 #include "ui_text.h"
 #include "mamedbg.h"
-#include "artwork.h"
+//#include "artwork.h"
 #include "state.h"
 #include "unzip.h"
 #include "vidhrdw/generic.h"
 #include "vidhrdw/vector.h"
 #include "palette.h"
 #include "harddisk.h"
+
 
 
 /***************************************************************************
@@ -302,9 +303,12 @@ int run_game(int game)
 
 	/* validity checks -- the default is to perform these in all builds now
      * due to the number of incorrect submissions */
+	//THRASH TILL DEATH!!
 	if (!options.skip_validitychecks)
 		if (mame_validitychecks())
 			return 1;
+
+    logWriteX("paso los validitychecks","","",sceKernelGetThreadId() );
 
 	/* first give the machine a good cleaning */
 	memset(Machine, 0, sizeof(Machine));
@@ -349,6 +353,7 @@ int run_game(int game)
 			bail_and_print("Unable to initialize machine emulation");
 		else
 		{
+
 			/* then run it */
 			if (run_machine())
 				bail_and_print("Unable to start machine emulation");
@@ -386,12 +391,16 @@ static int init_machine(void)
 		goto cant_load_language_file;
 	}
 
+    logWriteX("init_machine: paso load_language","","",sceKernelGetThreadId());
+
 	/* initialize the input system */
 	if (code_init() != 0)
 	{
 		logerror("code_init failed\n");
 		goto cant_init_input;
 	}
+
+    logWriteX("init_machine: paso code_init","","",sceKernelGetThreadId());
 
 	/* if we have inputs, process them now */
 	if (gamedrv->construct_ipt)
@@ -404,6 +413,8 @@ static int init_machine(void)
 			goto cant_allocate_input_ports;
 		}
 
+
+
 		/* allocate default input ports */
 		Machine->input_ports_default = input_port_allocate(gamedrv->construct_ipt);
 		if (!Machine->input_ports_default)
@@ -413,23 +424,39 @@ static int init_machine(void)
 		}
 	}
 
+	logWriteX("init_machine: paso input_ports","","",sceKernelGetThreadId());
+
 	/* init the hard drive interface now, before attempting to load */
 	chd_set_interface(&mame_chd_interface);
+
+
+	logWriteX("init_machine: paso chd_interface","","",sceKernelGetThreadId());
 
 	/* load the ROMs if we have some */
 	if (gamedrv->rom && rom_load(gamedrv->rom) != 0)
 	{
+
+		logWriteX("init_machine: FALLO ROM_LOAD!!!","","",sceKernelGetThreadId());
 		logerror("readroms failed\n");
 		goto cant_load_roms;
 	}
 
+	logWriteX("init_machine: paso ROM_LOAD!","","",sceKernelGetThreadId());
+
 	/* first init the timers; some CPUs have built-in timers and will need */
 	/* to allocate them up front */
 	timer_init();
+
+	logWriteX("init_machine: paso timer_init!","","",sceKernelGetThreadId());
+
 	cpu_init_refresh_timer();
+
+    logWriteX("init_machine: itentando ejecutar cpu_init...","","",sceKernelGetThreadId());
 
 	/* now set up all the CPUs */
 	cpu_init();
+
+    logWriteX("init_machine: paso cpu_init!","","",sceKernelGetThreadId());
 
 #ifdef MESS
 	/* initialize the devices */
@@ -442,6 +469,8 @@ static int init_machine(void)
 
 	/* load input ports settings (keys, dip switches, and so on) */
 	settingsloaded = load_input_port_settings();
+
+    logWriteX("init_machine: paso load_input_port_settings!","","",sceKernelGetThreadId());
 
 	/* multi-session safety - set spriteram size to zero before memory map is set up */
 	spriteram_size = spriteram_2_size = 0;
@@ -456,9 +485,14 @@ static int init_machine(void)
 	/* clear out the memcard interface */
 	init_memcard();
 
+    logWriteX("init_machine: intentando iniciar el driver driver_init()...","","",sceKernelGetThreadId());
+
 	/* call the game driver's init function */
 	if (gamedrv->driver_init)
 		(*gamedrv->driver_init)();
+
+	logWriteX("init_machine: paso driver_init()!","","",sceKernelGetThreadId());
+
 
 #ifdef MESS
 	/* initialize the devices */
@@ -496,26 +530,37 @@ static int run_machine(void)
 	int res = 1;
 
 	/* start the video hardware */
-printfnw_("vh_open\r");	//TMK
+psp_clear_screen();
+printfnw_("vh_open");	//TMK
 	if (vh_open())
 		bail_and_print("Unable to start video emulation");
 	else
 	{
+
+osd_blitPreconfigure();
+
+psp_clear_screen();
 		/* initialize tilemaps */
-printfnw_("tilemap_init\r");	//TMK
+printfnw_("tilemap_init");	//TMK
 		tilemap_init();
 		flip_screen_set(0);
 
+psp_clear_screen();
 		/* start up the driver's video */
-printfnw_("video_start\r");	//TMK
+printfnw_("video_start");	//TMK
 		if (Machine->drv->video_start && (*Machine->drv->video_start)())
 			bail_and_print("Unable to start video emulation");
 		else
 		{
-printfnw_("sound_start\r");	//TMK
+psp_clear_screen();
+printfnw_("sound_start");	//TMK
 			/* start the audio system */
-			if (sound_start())
-				bail_and_print("Unable to start audio emulation");
+			if (sound_start()){
+				bail_and_print("Unable to start audio emulation");  //<--- ORIGINAL from mame Core
+			/*	if (!mame_sound_start())
+                    bail_and_print("Unable to start audio emulation");*/
+            logWriteX("Unable to start audio emulation!!!!","","",888);
+			}
 			else
 			{
 				int region;
@@ -533,7 +578,10 @@ printfnw_("sound_start\r");	//TMK
 						Machine->memory_region[region].base = 0;
 					}
 
-printfnw_("run_machine_core\r");	//TMK
+logWriteX("run_machine: intentando correr run_machine_core()...","","",sceKernelGetThreadId());
+
+psp_clear_screen();
+printfnw_("run_machine_core");	//TMK
 				/* now do the core execution */
 				run_machine_core();
 				res = 0;
@@ -565,74 +613,108 @@ void run_machine_core(void)
 {
 	input_port_settings_modify =0;
 
-	pgFillvram(0); pgScreenFrame(2,0); //TMK ADD
-//	pgFillvram(0); pgScreenFlipV(); //TMK ADD
-//	pgFillvram(0); pgScreenFlipV();
-	psp_gu_init();
+
+	logWriteX("run_machine_core: reseteando pantalla... ","","",sceKernelGetThreadId());
+
+	/*pgFillvram(0); pgScreenFlipV(); //TMK ADD
+	pgFillvram(0); pgScreenFlipV();*/
+
+    logWriteX("run_machine_core: reseteo la pantalla!!! ","","",sceKernelGetThreadId());
 
 	/* disable artwork for the start */
-	artwork_enable(0);
+	//artwork_enable(0);
 
 	/* if we didn't find a settings file, show the disclaimer */
-	if (settingsloaded || options.skip_disclaimer || showcopyright(artwork_get_ui_bitmap()) == 0)
+	if (settingsloaded || options.skip_disclaimer ||
+	    showcopyright(/*artwork_get_ui_bitmap() */Machine->scrbitmap) == 0)
 	{
 		/* show info about incorrect behaviour (wrong colors etc.) */
-		if (options.skip_warnings || showgamewarnings(artwork_get_ui_bitmap()) == 0)
+		if (options.skip_warnings || showgamewarnings(/*artwork_get_ui_bitmap()*/Machine->scrbitmap) == 0)
 		{
 			/* show info about the game */
-			if (options.skip_gameinfo || showgameinfo(artwork_get_ui_bitmap()) == 0)
+			if (options.skip_gameinfo || showgameinfo(Machine->scrbitmap/*artwork_get_ui_bitmap()*/) == 0)
 			{
+
+				logWriteX("run_machine_core: iniciando interface de usuario...","","",sceKernelGetThreadId());
+
 				init_user_interface();
 
+                logWriteX("run_machine_core: paso init_user_interface !!! ","","",sceKernelGetThreadId());
+
 				/* enable artwork now */
-				artwork_enable(1);
+				//artwork_enable(1);
+
+                logWriteX("run_machine_core: paso artwor_enable !!! ","","",sceKernelGetThreadId());
 
 				/* disable cheat if no roms */
 				if (!gamedrv->rom)
 					options.cheat = 0;
 
 				/* start the cheat engine */
-				if (options.cheat)
-					InitCheat();
+				/*if (options.cheat)
+					InitCheat();*/
 
 				/* load the NVRAM now */
 				if (Machine->drv->nvram_handler)
 				{
+
+					logWriteX("run_machine_core: intenando iniciar nvram_handler...","","",sceKernelGetThreadId());
+
 					mame_file *nvram_file = mame_fopen(Machine->gamedrv->name, 0, FILETYPE_NVRAM, 0);
 					(*Machine->drv->nvram_handler)(nvram_file, 0);
 					if (nvram_file)
 						mame_fclose(nvram_file);
 				}
 
+                logWriteX("run_machine_core: iniciao el nvram_handler!!!","","",sceKernelGetThreadId());
+
+
+				logWriteX("run_machine_core: intenando correr la cpu , cpu_run()...","","",sceKernelGetThreadId());
+
+				psp_clear_screen();
 				/* run the emulation! */
 				cpu_run();
+
+                logWriteX("run_machine_core: paso cpu_run()!!!","","",sceKernelGetThreadId());
 
 				/* save the NVRAM */
 				if (Machine->drv->nvram_handler)
 				{
+
+					logWriteX("run_machine_core: intentando guardar la nvram...","","",sceKernelGetThreadId());
+
 					mame_file *nvram_file = mame_fopen(Machine->gamedrv->name, 0, FILETYPE_NVRAM, 1);
 					if (nvram_file != NULL)
 					{
 						(*Machine->drv->nvram_handler)(nvram_file, 1);
 						mame_fclose(nvram_file);
 					}
+
+				logWriteX("run_machine_core: guardo la nvram!!!","","",sceKernelGetThreadId());
 				}
 
 				/* stop the cheat engine */
-				if (options.cheat)
+				/*if (options.cheat){
+					logWriteX("run_machine_core: intentando correr stopCheat","","",sceKernelGetThreadId());
 					StopCheat();
+                    logWriteX("run_machine_core: paso stopCheat!!!","","",sceKernelGetThreadId());
+				}*/
+
+				logWriteX("run_machine_core: intentando correr osd_sound_enable()0...","","",sceKernelGetThreadId());
 
 				osd_sound_enable( 0 ); //TMK
 
+                logWriteX("run_machine_core: paso osd_sound_enable!!!","","",sceKernelGetThreadId());
+
 				/* save input ports settings */
-				if (input_port_settings_modify) // TMK
+				if (input_port_settings_modify){ // TMK
 					save_input_port_settings();
+					logWriteX("run_machine_core: paso save_input_port_settings!!!","","",sceKernelGetThreadId());
+				}
+			    logWriteX("run_machine_core: saliendo de la WEA!!!","","",sceKernelGetThreadId());
 			}
 		}
 	}
-
-	psp_gu_term();
-
 }
 
 
@@ -651,9 +733,6 @@ static void shutdown_machine(void)
 	devices_exit();
 #endif
 
-	/* reset the CPU system -- must be done before memory goes away */
-	cpu_exit();
-
 	/* release any allocated memory */
 	memory_shutdown();
 
@@ -663,6 +742,9 @@ static void shutdown_machine(void)
 
 	/* close all hard drives */
 	chd_close_all();
+
+	/* reset the CPU system */
+	cpu_exit();
 
 	/* close down the input system */
 	code_close();
@@ -711,7 +793,7 @@ void expand_machine_driver(void (*constructor)(struct InternalMachineDriver *), 
 static int vh_open(void)
 {
 	struct osd_create_params params;
-	struct artwork_callbacks *artcallbacks;
+	//struct artwork_callbacks *artcallbacks;
 	int bmwidth = Machine->drv->screen_width;
 	int bmheight = Machine->drv->screen_height;
 
@@ -751,21 +833,21 @@ static int vh_open(void)
 #ifdef MESS
 	artcallbacks = &mess_artwork_callbacks;
 #else
-	artcallbacks = &mame_artwork_callbacks;
+	//artcallbacks = &mame_artwork_callbacks;
 #endif
 
 	/* initialize the display through the artwork (and eventually the OSD) layer */
-	if (artwork_create_display(&params, direct_rgb_components, artcallbacks))
-		goto cant_create_display;
+	/*if (artwork_create_display(&params, direct_rgb_components, artcallbacks))
+		goto cant_create_display;*/
+      if (/*artwork*/osd_create_display(&params, direct_rgb_components/*, artcallbacks*/))
+		 goto cant_create_display;
 
 	/* the create display process may update the vector width/height, so recompute */
 	if (Machine->drv->video_attributes & VIDEO_TYPE_VECTOR)
 		scale_vectorgames(options.vector_width, options.vector_height, &bmwidth, &bmheight);
 
 	/* now allocate the screen bitmap */
-//TMK
-//	Machine->scrbitmap = auto_bitmap_alloc_depth(bmwidth, bmheight, Machine->color_depth);
-	Machine->scrbitmap = auto_bitmap_alloc_depth_vram(bmwidth, bmheight, Machine->color_depth);
+	Machine->scrbitmap = auto_bitmap_alloc_depth(bmwidth, bmheight, Machine->color_depth);
 	if (!Machine->scrbitmap)
 		goto cant_create_scrbitmap;
 
@@ -924,6 +1006,7 @@ static int init_game_options(void)
 	record	   = options.record;
 	playback   = options.playback;
 	mame_debug = options.mame_debug;
+	char dbg[256];
 
 	/* determine the color depth */
 	Machine->color_depth = 16;
@@ -947,6 +1030,9 @@ static int init_game_options(void)
 
 	/* initialize the samplerate */
 	Machine->sample_rate = options.samplerate;
+
+    sprintf(dbg,"Machine->sample_rate=='%d'",Machine->sample_rate);
+    logWriteX("AUDIO-SAMPLERATE: ",dbg,"",999);
 
 	/* get orientation right */
 	Machine->ui_orientation = options.ui_orientation;
@@ -1322,17 +1408,18 @@ void update_video_and_audio(void)
 #endif
 
 	/* set the LED status */
-	if (leds_status != current_display.led_state)
+	/*if (leds_status != current_display.led_state)<-- toqueteado
 	{
 		current_display.led_state = leds_status;
 		current_display.changed_flags |= LED_STATE_CHANGED;
-	}
+	}*/
 
 	/* update with data from other parts of the system */
 	palette_update_display(&current_display);
 
-	/* render */
-	artwork_update_video_and_audio(&current_display);
+	/* render */ //osd_update_video_and_audio(display); <-- toqueteado
+	//artwork_update_video_and_audio(&current_display); <-- toqueteado
+    osd_update_video_and_audio(&current_display);
 
 	/* update FPS */
 	recompute_fps(skipped_it);
@@ -1395,9 +1482,12 @@ static void recompute_fps(int skipped_it)
     operations
 -------------------------------------------------*/
 
-extern int psp_exit;	//TMK
+//extern int psp_exit;	//TMK
 int updatescreen(void)
 {
+
+	if (psp_loop != 2) return 1;		/* quit if the user asked to */
+
 	/* update sound */
 	sound_frame_update();
 
@@ -1413,7 +1503,14 @@ int updatescreen(void)
 	/* to allow it to overlay things on the game display. We must call it even */
 	/* if the frame is skipped, to keep a consistent timing. */
 //TMK	if (handle_user_interface(artwork_get_ui_bitmap()))
-	if (handle_user_interface(artwork_get_ui_bitmap()) || psp_exit)
+
+	#if 0
+	if (handle_user_interface(artwork_get_ui_bitmap()) /*|| psp_exit*/)
+		/* quit if the user asked to */
+		return 1;
+	#endif
+
+	if (handle_user_interface(Machine->scrbitmap) /*|| psp_exit*/)
 		/* quit if the user asked to */
 		return 1;
 
@@ -1451,8 +1548,8 @@ int mame_highscore_enabled(void)
 		return 0;
 
 	/* disable high score when cheats are used */
-	if (he_did_cheat != 0)
-		return 0;
+	/*if (he_did_cheat != 0)
+		return 0;*/
 
 	return 1;
 }
@@ -2216,7 +2313,8 @@ int mame_validitychecks(void)
 							&& inp->name >= (inp+1)->name && !memcmp(&inp->dipsetting, &(inp+1)->dipsetting, sizeof(inp->dipsetting)))
 					{
 						printf("%s: %s has unsorted coinage %s > %s\n",drivers[i]->source_file,drivers[i]->name,inp->name,(inp+1)->name);
-						error = 1;
+						//error = 1;
+						error = 0;
 					}
 
 					/* check for bad flip screen options */

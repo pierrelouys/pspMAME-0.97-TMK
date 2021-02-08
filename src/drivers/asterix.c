@@ -284,11 +284,11 @@ static struct K053260_interface k053260_interface =
 static MACHINE_DRIVER_START( asterix )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 12000000)
+	MDRV_CPU_ADD(M68000, 12000000) //orig 12000000
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_VBLANK_INT(asterix_interrupt,1)
 
-	MDRV_CPU_ADD(Z80, 8000000)
+	MDRV_CPU_ADD(Z80, 8000000) //orig 8000000
 	/* audio CPU */
 	MDRV_CPU_PROGRAM_MAP(sound_readmem,sound_writemem)
 

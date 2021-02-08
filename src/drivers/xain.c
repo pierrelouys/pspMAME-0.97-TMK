@@ -472,14 +472,14 @@ static struct YM2203interface ym2203_interface =
 static MACHINE_DRIVER_START( xsleena )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M6809, 1500000)	/* Confirmed 1.5MHz */
+	MDRV_CPU_ADD(M6809, 3000000)	/* Confirmed 1.5MHz */
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_VBLANK_INT(xain_interrupt,256)
 
-	MDRV_CPU_ADD(M6809, 1500000)	/* Confirmed 1.5MHz */
+	MDRV_CPU_ADD(M6809, 3000000)	/* Confirmed 1.5MHz */
 	MDRV_CPU_PROGRAM_MAP(readmemB,writememB)
 
-	MDRV_CPU_ADD(M6809, 1500000)	/* Confirmed 1.5MHz */
+	MDRV_CPU_ADD(M6809, 3000000)	/* Confirmed 1.5MHz */
 	/* audio CPU */
 	MDRV_CPU_PROGRAM_MAP(sound_readmem,sound_writemem)
 
@@ -502,14 +502,14 @@ static MACHINE_DRIVER_START( xsleena )
 	/* sound hardware */
 	MDRV_SPEAKER_STANDARD_MONO("mono")
 
-	MDRV_SOUND_ADD(YM2203, 3000000)
+	MDRV_SOUND_ADD(YM2203, 3000000)//3000000
 	MDRV_SOUND_CONFIG(ym2203_interface)
 	MDRV_SOUND_ROUTE(0, "mono", 0.50)
 	MDRV_SOUND_ROUTE(1, "mono", 0.50)
 	MDRV_SOUND_ROUTE(2, "mono", 0.50)
 	MDRV_SOUND_ROUTE(3, "mono", 0.40)
 
-	MDRV_SOUND_ADD(YM2203, 3000000)
+	MDRV_SOUND_ADD(YM2203, 3000000)//3000000
 	MDRV_SOUND_ROUTE(0, "mono", 0.50)
 	MDRV_SOUND_ROUTE(1, "mono", 0.50)
 	MDRV_SOUND_ROUTE(2, "mono", 0.50)

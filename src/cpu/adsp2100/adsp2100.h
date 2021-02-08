@@ -80,7 +80,7 @@ enum
 **  PUBLIC FUNCTIONS
 **#################################################################################################*/
 
-#if (HAS_ADSP2100)
+#if (HAS_ADSP2100 || HAS_ADSP2100_ORIG)
 #define ADSP2100_IRQ0		0		/* IRQ0 */
 #define ADSP2100_SPORT1_RX	0		/* SPORT1 receive IRQ */
 #define ADSP2100_IRQ1		1		/* IRQ1 */
@@ -91,7 +91,7 @@ enum
 extern void adsp2100_get_info(UINT32 state, union cpuinfo *info);
 #endif
 
-#if (HAS_ADSP2101)
+#if (HAS_ADSP2101  || HAS_ADSP2101_ORIG)
 /**************************************************************************
  * ADSP2101 section
  **************************************************************************/
@@ -107,7 +107,7 @@ extern void adsp2100_get_info(UINT32 state, union cpuinfo *info);
 extern void adsp2101_get_info(UINT32 state, union cpuinfo *info);
 #endif
 
-#if (HAS_ADSP2104)
+#if (HAS_ADSP2104 || HAS_ADSP2104_ORIG)
 /**************************************************************************
  * ADSP2104 section
  **************************************************************************/
@@ -124,7 +124,7 @@ extern void adsp2104_get_info(UINT32 state, union cpuinfo *info);
 extern void adsp2104_load_boot_data(data8_t *srcdata, data32_t *dstdata);
 #endif
 
-#if (HAS_ADSP2105)
+#if (HAS_ADSP2105 || HAS_ADSP2105_ORIG)
 /**************************************************************************
  * ADSP2105 section
  **************************************************************************/
@@ -139,7 +139,7 @@ extern void adsp2105_get_info(UINT32 state, union cpuinfo *info);
 extern void adsp2105_load_boot_data(data8_t *srcdata, data32_t *dstdata);
 #endif
 
-#if (HAS_ADSP2115)
+#if (HAS_ADSP2115 || HAS_ADSP2115_ORIG)
 /**************************************************************************
  * ADSP2115 section
  **************************************************************************/

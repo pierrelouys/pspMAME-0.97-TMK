@@ -100,7 +100,7 @@ extern void m6803_get_info(UINT32 state, union cpuinfo *info);
 /****************************************************************************
  * For now make the 6808 using the m6800 variables and functions
  ****************************************************************************/
-#if (HAS_M6808)
+#if (HAS_M6808 || HAS_M6808_ORIG)
 #define M6808_A 					M6800_A
 #define M6808_B 					M6800_B
 #define M6808_PC					M6800_PC

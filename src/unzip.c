@@ -12,7 +12,9 @@ int	gUnzipQuiet = 0;		/* flag controls error messages */
 
 
 #define ERROR_CORRUPT "The zipfile seems to be corrupt, please check it"
-#define ERROR_FILESYSTEM "Your filesystem seems to be corrupt, please check it"
+#define ERROR_FILESYSTEM "(1-OPEN)Your filesystem seems to be corrupt, please check it"
+#define ERROR_FILESYSTEM2 "(2-SEEK)Your filesystem seems to be corrupt, please check it"
+#define ERROR_FILESYSTEM3 "(3-FTELL)Your filesystem seems to be corrupt, please check it"
 #define ERROR_UNSUPPORTED "The format of this zipfile is not supported, please recompress it"
 
 #define INFLATE_INPUT_BUFFER_MAX 16384
@@ -196,7 +198,7 @@ ZIP* openzip(int pathtype, int pathindex, const char* zipfile) {
 
 	/* go to end */
 	if (osd_fseek(zip->fp, 0L, SEEK_END) != 0) {
-		errormsg ("Seeking to end", ERROR_FILESYSTEM, zipfile);
+		errormsg ("Seeking to end", ERROR_FILESYSTEM2, zipfile);
 		osd_fclose(zip->fp);
 		free(zip);
 		return 0;
@@ -204,8 +206,9 @@ ZIP* openzip(int pathtype, int pathindex, const char* zipfile) {
 
 	/* get length */
 	zip->length = osd_ftell(zip->fp);
+	logWriteY("(openZip) pechando largo del zip...v1='zip->length'","","",sceKernelGetThreadId(),zip->length,0);
 	if (zip->length < 0) {
-		errormsg ("Get file size", ERROR_FILESYSTEM, zipfile);
+        errormsg ("Get file size", ERROR_FILESYSTEM3, zipfile);//<----- aca pincha!
 		osd_fclose(zip->fp);
 		free(zip);
 		return 0;

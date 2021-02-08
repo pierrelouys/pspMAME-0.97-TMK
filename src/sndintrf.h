@@ -379,5 +379,7 @@ WRITE8_HANDLER( soundlatch4_clear_w );
    that this one call effects all 4 latches */
 void soundlatch_setclearedvalue(int value);
 
+//model 2 added
+int  mame_sound_start(void);
 
 #endif

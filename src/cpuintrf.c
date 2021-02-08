@@ -288,9 +288,9 @@ const struct
 } cpuintrf_map[] =
 {
 	{ CPU_DUMMY, dummy_get_info },
-#if (HAS_Z80)
+
 	{ CPU_Z80, z80_get_info },
-#endif
+
 #if (HAS_Z180)
 	{ CPU_Z180, z180_get_info },
 #endif
@@ -300,7 +300,7 @@ const struct
 #if (HAS_8085A)
 	{ CPU_8085A, i8085_get_info },
 #endif
-#if (HAS_M6502)
+#if (HAS_M6502 || HAS_M6502_ORIG)
 	{ CPU_M6502, m6502_get_info },
 #endif
 #if (HAS_M65C02)
@@ -336,9 +336,14 @@ const struct
 #if (HAS_M4510)
 	{ CPU_M4510, m4510_get_info },
 #endif
+
 #if (HAS_H6280)
 	{ CPU_H6280, h6280_get_info },
 #endif
+#if (HAS_H6280_ORIG)
+	{ CPU_H6280, h6280_get_info },
+#endif
+
 #if (HAS_I86)
 	{ CPU_I86, i86_get_info },
 #endif
@@ -357,10 +362,10 @@ const struct
 #if (HAS_V20)
 	{ CPU_V20, v20_get_info },
 #endif
-#if (HAS_V30)
+#if (HAS_V30  || HAS_V30_ORIG)
 	{ CPU_V30, v30_get_info },
 #endif
-#if (HAS_V33)
+#if (HAS_V33 || HAS_V33_ORIG)
 	{ CPU_V33, v33_get_info },
 #endif
 #if (HAS_V60)
@@ -396,19 +401,40 @@ const struct
 #if (HAS_I8751)
 	{ CPU_I8752, i8752_get_info },
 #endif
+
+#if (HAS_I8751_ORIG)
+	{ CPU_I8751, i8751_get_info },
+#endif
+/*#if (HAS_I8751_ORIG)
+	{ CPU_I8752, i8752_get_info },
+#endif*/
+
+#if (HAS_I8752_ORIG)
+	{ CPU_I8752, i8752_get_info },
+#endif
+
+
 #if (HAS_M6800)
 	{ CPU_M6800, m6800_get_info },
 #endif
+
+#if (HAS_M6800_ORIG)
+	{ CPU_M6800, m6800_get_info },
+#endif
+
 #if (HAS_M6801)
 	{ CPU_M6801, m6801_get_info },
 #endif
 #if (HAS_M6802)
 	{ CPU_M6802, m6802_get_info },
 #endif
-#if (HAS_M6803)
-	{ CPU_M6803, m6803_get_info },
+#if (REPUKEN2_DEATHRASH)
+{ CPU_M6803, m6803_get_info },
 #endif
-#if (HAS_M6808)
+/*#if (HAS_M6803)
+	{ CPU_M6803, m6803_get_info },
+#endif*/
+#if (HAS_M6808 || HAS_M6808_ORIG)
 	{ CPU_M6808, m6808_get_info },
 #endif
 #if (HAS_HD63701)
@@ -426,28 +452,41 @@ const struct
 #if (HAS_HD63705)
 	{ CPU_HD63705, hd63705_get_info },
 #endif
-#if (HAS_HD6309)
+#if (HAS_HD6309 || HAS_HD6309_ORIG)
 	{ CPU_HD6309, hd6309_get_info },
 #endif
 #if (HAS_M6809)
 	{ CPU_M6809, m6809_get_info },
 #endif
-#if (HAS_M6809E)
+#if (HAS_M6809E || HAS_M6809E_ORIG)
 	{ CPU_M6809E, m6809e_get_info },
 #endif
 #if (HAS_KONAMI)
 	{ CPU_KONAMI, konami_get_info },
 #endif
+
+#if (HAS_KONAMI_ORIG)
+	{ CPU_KONAMI, konami_get_info },
+#endif
+
 #if (HAS_M68000)
 	{ CPU_M68000, m68000_get_info },
 #endif
+
+#if (HAS_M68000_ORIG)
+	{ CPU_M68000, m68000_get_info },
+#endif
+#if (HAS_M68000_NJ)
+	{ CPU_M68000, m68000_get_info },
+#endif
+
 #if (HAS_M68008)
 	{ CPU_M68008, m68008_get_info },
 #endif
-#if (HAS_M68010)
+#if (HAS_M68010_ORIG)
 	{ CPU_M68010, m68010_get_info },
 #endif
-#if (HAS_M68EC020)
+#if (HAS_M68EC020 || HAS_M68EC020_ORIG)
 	{ CPU_M68EC020, m68ec020_get_info },
 #endif
 #if (HAS_M68020)
@@ -459,7 +498,7 @@ const struct
 #if (HAS_S2650)
 	{ CPU_S2650, s2650_get_info },
 #endif
-#if (HAS_TMS34010)
+#if (HAS_TMS34010 || HAS_TMS34010_ORIG)
 	{ CPU_TMS34010, tms34010_get_info },
 #endif
 #if (HAS_TMS34020)
@@ -510,19 +549,19 @@ const struct
 #if (HAS_CCPU)
 	{ CPU_CCPU, ccpu_get_info },
 #endif
-#if (HAS_ADSP2100)
+#if (HAS_ADSP2100 || HAS_ADSP2100_ORIG)
 	{ CPU_ADSP2100, adsp2100_get_info },
 #endif
-#if (HAS_ADSP2101)
+#if (HAS_ADSP2101 || HAS_ADSP2101_ORIG)
 	{ CPU_ADSP2101, adsp2101_get_info },
 #endif
-#if (HAS_ADSP2104)
+#if (HAS_ADSP2104 || HAS_ADSP2104_ORIG)
 	{ CPU_ADSP2104, adsp2104_get_info },
 #endif
-#if (HAS_ADSP2105)
+#if (HAS_ADSP2105 || HAS_ADSP2105_ORIG)
 	{ CPU_ADSP2105, adsp2105_get_info },
 #endif
-#if (HAS_ADSP2115)
+#if (HAS_ADSP2115 || HAS_ADSP2115_ORIG)
 	{ CPU_ADSP2115, adsp2115_get_info },
 #endif
 #if (HAS_ADSP2181)
@@ -932,12 +971,20 @@ int cpuintrf_init_cpu(int cpunum, int cputype)
 	char familyname[256];
 	int j;
 
+	logWriteX("cpuintrf.c: entro a cpuintrf_init_cpu","","",777);
+
 	/* fill in the type and interface */
 	cpu[cpunum].intf = cpuintrf[cputype];
 	cpu[cpunum].cputype = cputype;
 
+    logWriteX("cpuintrf.c: paso el bloque cpu[cpunum].cputype","","",777);
+
 	/* determine the family index */
 	strcpy(familyname, cputype_core_file(cputype));
+
+	logWriteX("cpuintrf.c: paso strcpy(familyname, cputype_core_file(cputype));","","",777);
+
+
 	for (j = 0; j < CPU_COUNT; j++)
 		if (!strcmp(familyname, cputype_core_file(j)))
 		{
@@ -945,17 +992,30 @@ int cpuintrf_init_cpu(int cpunum, int cputype)
 			break;
 		}
 
+    logWriteX("cpuintrf.c: a punto de alocar el contexto","","",777);
+
 	/* allocate a context buffer for the CPU */
 	cpu[cpunum].context = malloc(cpu[cpunum].intf.context_size);
+
+	logWriteX("cpuintrf.c: aloco el contexto","","",777);
+
 	if (cpu[cpunum].context == NULL)
 	{
+
+		logWriteX("cpuintrf.c: el contexto es NULL!!!","","",777);
+
 		/* that's really bad :( */
 		logerror("CPU #%d failed to allocate context buffer (%d bytes)!\n", cpunum, (int)cpu[cpunum].intf.context_size);
 		return 1;
 	}
 
+    logWriteX("cpuintrf.c: aloco el contexto","","",777);
+
 	/* zap the context buffer */
 	memset(cpu[cpunum].context, 0, cpu[cpunum].intf.context_size);
+
+
+    logWriteX("cpuintrf.c: paso memset(cpu[cpunum].context, 0, cpu[cpunum].intf.context_size);","","",777);
 
 	/* initialize the CPU and stash the context */
 	activecpu = cpunum;
@@ -984,12 +1044,7 @@ void cpuintrf_exit_cpu(int cpunum)
 {
 	/* if the CPU core defines an exit function, call it now */
 	if (cpu[cpunum].intf.exit)
-	{
-		/* switch contexts to the CPU during the exit */
-		cpuintrf_push_context(cpunum);
 		(*cpu[cpunum].intf.exit)();
-		cpuintrf_pop_context();
-	}
 
 	/* free the context buffer for that CPU */
 	if (cpu[cpunum].context)

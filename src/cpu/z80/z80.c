@@ -825,7 +825,6 @@ INLINE UINT32 ARG16(void)
  * RETN
  ***************************************************************/
 #define RETN	{												\
-	LOG(("Z80 #%d RETN IFF1:%d IFF2:%d\n", cpu_getactivecpu(), IFF1, IFF2)); \
 	POP( pc );													\
 	change_pc(PCD);												\
 	if( IFF1 == 0 && IFF2 == 1 )								\
@@ -834,8 +833,6 @@ INLINE UINT32 ARG16(void)
 		if( Z80.irq_state != CLEAR_LINE ||						\
 			Z80.request_irq >= 0 )								\
 		{														\
-			LOG(("Z80 #%d RETN takes IRQ\n",					\
-				cpu_getactivecpu()));							\
 			take_interrupt();									\
 		}														\
 	}															\
@@ -853,8 +850,6 @@ INLINE UINT32 ARG16(void)
 /*  IFF1 = IFF2;    */											\
 	if( device >= 0 )											\
 	{															\
-		LOG(("Z80 #%d RETI device %d: $%02x\n",					\
-			cpu_getactivecpu(), device, Z80.irq[device].irq_param)); \
 		Z80.irq[device].interrupt_reti(Z80.irq[device].irq_param); \
 	}															\
 }
@@ -1747,8 +1742,6 @@ INLINE UINT8 SET(UINT8 bit, UINT8 value)
 		R++;													\
 		while( cpu_readop(PCD) == 0xfb ) /* more EIs? */		\
 		{														\
-			LOG(("Z80 #%d multiple EI opcodes at %04X\n",		\
-				cpu_getactivecpu(), PC));						\
 			CC(op,0xfb);										\
 			PRVPC = PCD;										\
 			CALL_MAME_DEBUG;									\
@@ -1761,7 +1754,6 @@ INLINE UINT8 SET(UINT8 bit, UINT8 value)
 			after_EI = 1;	/* avoid cycle skip hacks */		\
 			EXEC(op,ROP());										\
 			after_EI = 0;										\
-			LOG(("Z80 #%d EI takes irq\n", cpu_getactivecpu())); \
 			take_interrupt();									\
 		} else EXEC(op,ROP());									\
 	} else IFF2 = 1;											\
@@ -3686,7 +3678,7 @@ static void take_interrupt(void)
 				/* Clear both interrupt flip flops */
 				IFF1 = IFF2 = 0;
 				irq_vector = Z80.irq[Z80.request_irq].interrupt_entry(Z80.irq[Z80.request_irq].irq_param);
-				LOG(("Z80 #%d daisy chain irq_vector $%02x\n", cpu_getactivecpu(), irq_vector));
+				//LOG(("Z80 #%d daisy chain irq_vector $%02x\n", cpu_getactivecpu(), irq_vector));
 				Z80.request_irq = -1;
 			} else return;
 		}
@@ -3696,7 +3688,7 @@ static void take_interrupt(void)
 			IFF1 = IFF2 = 0;
 			/* call back the cpu interface to retrieve the vector */
 			irq_vector = (*Z80.irq_callback)(0);
-			LOG(("Z80 #%d single int. irq_vector $%02x\n", cpu_getactivecpu(), irq_vector));
+			//LOG(("Z80 #%d single int. irq_vector $%02x\n", cpu_getactivecpu(), irq_vector));
 		}
 
 		/* Interrupt mode 2. Call [Z80.i:databyte] */
@@ -3705,7 +3697,7 @@ static void take_interrupt(void)
 			irq_vector = (irq_vector & 0xff) | (I << 8);
 			PUSH( pc );
 			RM16( irq_vector, &Z80.pc );
-			LOG(("Z80 #%d IM2 [$%04x] = $%04x\n",cpu_getactivecpu() , irq_vector, PCD));
+			//LOG(("Z80 #%d IM2 [$%04x] = $%04x\n",cpu_getactivecpu() , irq_vector, PCD));
 			/* CALL opcode timing */
 			Z80.extra_cycles += cc[Z80_TABLE_op][0xcd];
 		}
@@ -3713,7 +3705,7 @@ static void take_interrupt(void)
 		/* Interrupt mode 1. RST 38h */
 		if( IM == 1 )
 		{
-			LOG(("Z80 #%d IM1 $0038\n",cpu_getactivecpu() ));
+			//LOG(("Z80 #%d IM1 $0038\n",cpu_getactivecpu() ));
 			PUSH( pc );
 			PCD = 0x0038;
 			/* RST $38 + 'interrupt latency' cycles */
@@ -3724,7 +3716,7 @@ static void take_interrupt(void)
 			/* Interrupt mode 0. We check for CALL and JP instructions, */
 			/* if neither of these were found we assume a 1 byte opcode */
 			/* was placed on the databus                                */
-			LOG(("Z80 #%d IM0 $%04x\n",cpu_getactivecpu() , irq_vector));
+			//LOG(("Z80 #%d IM0 $%04x\n",cpu_getactivecpu() , irq_vector));
 			switch (irq_vector & 0xff0000)
 			{
 				case 0xcd0000:	/* call */
@@ -3982,11 +3974,11 @@ static void set_irq_line(int irqline, int state)
 	{
 		if( Z80.nmi_state == state ) return;
 
-		LOG(("Z80 #%d set_irq_line (NMI) %d\n", cpu_getactivecpu(), state));
+		//LOG(("Z80 #%d set_irq_line (NMI) %d\n", cpu_getactivecpu(), state));
 		Z80.nmi_state = state;
 		if( state == CLEAR_LINE ) return;
 
-		LOG(("Z80 #%d take NMI\n", cpu_getactivecpu()));
+		//LOG(("Z80 #%d take NMI\n", cpu_getactivecpu()));
 		PRVPC = -1;			/* there isn't a valid previous program counter */
 		LEAVE_HALT;			/* Check if processor was halted */
 
@@ -3997,7 +3989,7 @@ static void set_irq_line(int irqline, int state)
 	}
 	else
 	{
-		LOG(("Z80 #%d set_irq_line %d\n",cpu_getactivecpu() , state));
+		//LOG(("Z80 #%d set_irq_line %d\n",cpu_getactivecpu() , state));
 		Z80.irq_state = state;
 		if( state == CLEAR_LINE ) return;
 
@@ -4007,11 +3999,11 @@ static void set_irq_line(int irqline, int state)
 			daisychain = (*Z80.irq_callback)(irqline);
 			device = daisychain >> 8;
 			int_state = daisychain & 0xff;
-			LOG(("Z80 #%d daisy chain $%04x -> device %d, state $%02x",cpu_getactivecpu(), daisychain, device, int_state));
+			//LOG(("Z80 #%d daisy chain $%04x -> device %d, state $%02x",cpu_getactivecpu(), daisychain, device, int_state));
 
 			if( Z80.int_state[device] != int_state )
 			{
-				LOG((" change\n"));
+				//LOG((" change\n"));
 				/* set new interrupt status */
 				Z80.int_state[device] = int_state;
 				/* check interrupt status */
@@ -4030,12 +4022,12 @@ static void set_irq_line(int irqline, int state)
 					if( Z80.int_state[device] & Z80_INT_REQ )
 						Z80.request_irq = device;
 				}
-				LOG(("Z80 #%d daisy chain service_irq $%02x, request_irq $%02x\n", cpu_getactivecpu(), Z80.service_irq, Z80.request_irq));
+				//LOG(("Z80 #%d daisy chain service_irq $%02x, request_irq $%02x\n", cpu_getactivecpu(), Z80.service_irq, Z80.request_irq));
 				if( Z80.request_irq < 0 ) return;
 			}
 			else
 			{
-				LOG((" no change\n"));
+				//LOG((" no change\n"));
 				return;
 			}
 		}

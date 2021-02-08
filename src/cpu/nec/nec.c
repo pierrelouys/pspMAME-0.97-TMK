@@ -1003,7 +1003,7 @@ int v20_execute(int cycles)
 }
 #endif
 
-#if (HAS_V30)
+#if (HAS_V30 || HAS_V30_ORIG)
 void v30_init(void) { nec_init(1); }
 int v30_execute(int cycles) {
 	nec_ICount=cycles;
@@ -1030,7 +1030,7 @@ int v30_execute(int cycles) {
 }
 #endif
 
-#if (HAS_V33)
+#if (HAS_V33 || HAS_V33_ORIG)
 void v33_init(void) { nec_init(2); }
 int v33_execute(int cycles)
 {
@@ -1262,7 +1262,7 @@ void v20_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if (HAS_V30)
+#if (HAS_V30  || HAS_V30_ORIG)
 /**************************************************************************
  * CPU-specific set_info
  **************************************************************************/
@@ -1286,7 +1286,7 @@ void v30_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if (HAS_V33)
+#if (HAS_V33 || HAS_V33_ORIG)
 /**************************************************************************
  * CPU-specific set_info
  **************************************************************************/

@@ -316,11 +316,11 @@ static INTERRUPT_GEN( xmen_interrupt )
 static MACHINE_DRIVER_START( xmen )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 16000000)	/* ? */
+	MDRV_CPU_ADD(M68000, 16000000)	/* ? */ //orig 16000000
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_VBLANK_INT(xmen_interrupt,2)
 
-	MDRV_CPU_ADD(Z80,8000000)	/* verified with M1, guessed but accurate */
+	MDRV_CPU_ADD(Z80,8000000)	/* verified with M1, guessed but accurate */ //orig 8000000
 	/* audio CPU */	/* ????? */
 	MDRV_CPU_PROGRAM_MAP(sound_readmem,sound_writemem)
 
@@ -341,7 +341,7 @@ static MACHINE_DRIVER_START( xmen )
 	/* sound hardware */
 	MDRV_SPEAKER_STANDARD_STEREO("left", "right")
 
-	MDRV_SOUND_ADD(YM2151, 4000000)
+	MDRV_SOUND_ADD(YM2151, 3000000) //orig 4000000
 	MDRV_SOUND_ROUTE(0, "left", 0.80)
 	MDRV_SOUND_ROUTE(1, "right", 0.80)
 

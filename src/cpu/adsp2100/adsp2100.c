@@ -247,7 +247,7 @@ INLINE void WWORD_PGM(UINT32 addr, UINT32 data)
 **  OTHER INLINES
 **#################################################################################################*/
 
-#if (HAS_ADSP2100)
+#if (HAS_ADSP2100 || HAS_ADSP2100_ORIG)
 INLINE void set_core_2100(void)
 {
 	chip_type = CHIP_TYPE_ADSP2100;
@@ -256,7 +256,7 @@ INLINE void set_core_2100(void)
 }
 #endif
 
-#if (HAS_ADSP2101)
+#if (HAS_ADSP2101  || HAS_ADSP2101_ORIG)
 INLINE void set_core_2101(void)
 {
 	chip_type = CHIP_TYPE_ADSP2101;
@@ -265,7 +265,7 @@ INLINE void set_core_2101(void)
 }
 #endif
 
-#if (HAS_ADSP2104)
+#if (HAS_ADSP2104 || HAS_ADSP2104_ORIG)
 INLINE void set_core_2104(void)
 {
 	chip_type = CHIP_TYPE_ADSP2104;
@@ -274,7 +274,7 @@ INLINE void set_core_2104(void)
 }
 #endif
 
-#if (HAS_ADSP2105)
+#if (HAS_ADSP2105 || HAS_ADSP2105_ORIG)
 INLINE void set_core_2105(void)
 {
 	chip_type = CHIP_TYPE_ADSP2105;
@@ -283,7 +283,7 @@ INLINE void set_core_2105(void)
 }
 #endif
 
-#if (HAS_ADSP2115)
+#if (HAS_ADSP2115 || HAS_ADSP2115_ORIG)
 INLINE void set_core_2115(void)
 {
 	chip_type = CHIP_TYPE_ADSP2115;
@@ -1866,7 +1866,7 @@ static void adsp21xx_get_info(UINT32 state, union cpuinfo *info)
 }
 
 
-#if (HAS_ADSP2100)
+#if (HAS_ADSP2100 || HAS_ADSP2100_ORIG)
 /**************************************************************************
  * ADSP2100 section
  **************************************************************************/
@@ -1913,7 +1913,7 @@ void adsp2100_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if (HAS_ADSP2101)
+#if (HAS_ADSP2101  || HAS_ADSP2101_ORIG)
 /**************************************************************************
  * ADSP2101 section
  **************************************************************************/
@@ -1989,7 +1989,7 @@ void adsp2101_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if (HAS_ADSP2104)
+#if (HAS_ADSP2104 || HAS_ADSP2104_ORIG)
 /**************************************************************************
  * ADSP2104 section
  **************************************************************************/
@@ -2077,7 +2077,7 @@ void adsp2104_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if (HAS_ADSP2105)
+#if (HAS_ADSP2105 || HAS_ADSP2105_ORIG)
 /**************************************************************************
  * ADSP2105 section
  **************************************************************************/
@@ -2154,7 +2154,7 @@ void adsp2105_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if (HAS_ADSP2115)
+#if (HAS_ADSP2115 || HAS_ADSP2115_ORIG)
 /**************************************************************************
  * ADSP2115 section
  **************************************************************************/

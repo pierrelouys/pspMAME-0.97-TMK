@@ -150,7 +150,7 @@ void m68k_set_encrypted_opcode_range(int cpunum, offs_t start, offs_t end);
 #define M68K_EMULATE_008            OPT_OFF
 #endif
 
-#if HAS_M68010
+#if HAS_M68010_ORIG
 #define M68K_EMULATE_010            OPT_ON
 #else
 #define M68K_EMULATE_010            OPT_OFF
@@ -165,13 +165,13 @@ void m68k_set_encrypted_opcode_range(int cpunum, offs_t start, offs_t end);
 #undef  M68K_EMULATE_010
 #define M68K_EMULATE_010            OPT_ON
 
-#if HAS_M68EC020
+#if (HAS_M68EC020 || HAS_M68EC020_ORIG)
 #define M68K_EMULATE_EC020          OPT_ON
 #else
 #define M68K_EMULATE_EC020          OPT_OFF
 #endif
 
-#if HAS_M68020
+#if (HAS_M68020)
 #define M68K_EMULATE_020            OPT_ON
 #else
 #define M68K_EMULATE_020            OPT_OFF

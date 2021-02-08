@@ -9,15 +9,14 @@
 #include "driver.h"
 #include "png.h"
 #include "harddisk.h"
-#include "artwork.h"
+//#include "artwork.h"
 #include <stdarg.h>
 #include <ctype.h>
 
-
+#include <stdio.h>
 //#define LOG_LOAD
 
-//TMK
-void *psp_gu_bmp();
+
 
 /***************************************************************************
 
@@ -363,8 +362,6 @@ struct mame_bitmap *bitmap_alloc_core(int width,int height,int depth,int use_aut
 	{
 		int i, rowlen, rdwidth, bitmapsize, linearraysize, pixelsize;
 		unsigned char *bm;
-//TMK ADD
-//		height = (height + 127) & ~127;		// テクスチャの境界調整
 
 		/* initialize the basic parameters */
 		bitmap->depth = depth;
@@ -379,15 +376,12 @@ struct mame_bitmap *bitmap_alloc_core(int width,int height,int depth,int use_aut
 			pixelsize = 4;
 
 		/* round the width to a multiple of 8 */
-//TMK		rdwidth = (width + 7) & ~7;
-		rdwidth = (width + 255) & ~255;		// テクスチャの境界調整
+		rdwidth = (width + 7) & ~7;
 		rowlen = rdwidth + 2 * BITMAP_SAFETY;
 		bitmap->rowpixels = rowlen;
 
 		/* now convert from pixels to bytes */
 		rowlen *= pixelsize;
-//TMK 32byte align
-//		rowlen =(rowlen +31) & ~31;
 		bitmap->rowbytes = rowlen;
 
 		/* determine total memory for bitmap and line arrays */
@@ -398,13 +392,7 @@ struct mame_bitmap *bitmap_alloc_core(int width,int height,int depth,int use_aut
 		linearraysize = (linearraysize + 15) & ~15;
 
 		/* allocate the bitmap data plus an array of line pointers */
-//TMK
-		if (2 ==use_auto)
-			bitmap->line = use_auto ? auto_malloc(linearraysize) : malloc(linearraysize);
-		else
-//TMK
-//			bitmap->line = use_auto ? auto_malloc(linearraysize + bitmapsize) : malloc(linearraysize + bitmapsize);
-			bitmap->line = use_auto ? auto_malloc(linearraysize +bitmapsize +16) : malloc(linearraysize +bitmapsize +16);
+		bitmap->line = use_auto ? auto_malloc(linearraysize + bitmapsize) : malloc(linearraysize + bitmapsize);
 		if (bitmap->line == NULL)
 		{
 			if (!use_auto) free(bitmap);
@@ -412,14 +400,7 @@ struct mame_bitmap *bitmap_alloc_core(int width,int height,int depth,int use_aut
 		}
 
 		/* clear ALL bitmap, including safety area, to avoid garbage on right */
-//TMK
-		if (2 ==use_auto)
-			bm = (unsigned char *)psp_gu_bmp();
-		else
-//TMK
-//			bm = (unsigned char *)bitmap->line + linearraysize;
-			bm = (unsigned char *)((((((unsigned int)bitmap->line + linearraysize)) +15) & ~15)|0x40000000UL);
-//			bm = (unsigned char *)(((((unsigned int)(bitmap->line + linearraysize)) +15) & ~15));
+		bm = (unsigned char *)bitmap->line + linearraysize;
 		memset(bm, 0, (height + 2 * BITMAP_SAFETY) * rowlen);
 
 		/* initialize the line pointers */
@@ -571,11 +552,6 @@ struct mame_bitmap *auto_bitmap_alloc_depth(int width,int height,int depth)
 	return bitmap_alloc_core(width,height,depth,1);
 }
 
-struct mame_bitmap *auto_bitmap_alloc_depth_vram(int width,int height,int depth)
-{
-	return bitmap_alloc_core(width,height,depth,2);
-}
-
 
 /*-------------------------------------------------
     begin_resource_tracking - start tracking
@@ -619,6 +595,7 @@ void end_resource_tracking(void)
 
 void save_screen_snapshot_as(mame_file *fp, struct mame_bitmap *bitmap)
 {
+#if 0
 	struct rectangle bounds;
 	struct mame_bitmap *osdcopy;
 	UINT32 saved_rgb_components[3];
@@ -639,7 +616,8 @@ void save_screen_snapshot_as(mame_file *fp, struct mame_bitmap *bitmap)
 	artwork_override_screenshot_params(&bitmap, &bounds, direct_rgb_components);
 
 	/* allow the OSD system to muck with the screenshot */
-	osdcopy = osd_override_snapshot(bitmap, &bounds);
+	//osdcopy = osd_override_snapshot(bitmap, &bounds); HACK
+	osdcopy = NULL;
 	if (osdcopy)
 		bitmap = osdcopy;
 
@@ -716,7 +694,8 @@ void save_screen_snapshot_as(mame_file *fp, struct mame_bitmap *bitmap)
 
 	/* if the OSD system allocated a bitmap; free it */
 	if (osdcopy)
-		bitmap_free(osdcopy);
+		bitmap_free(osdcopy);*/
+#endif
 }
 
 
@@ -727,6 +706,7 @@ void save_screen_snapshot_as(mame_file *fp, struct mame_bitmap *bitmap)
 
 void save_screen_snapshot(struct mame_bitmap *bitmap)
 {
+#if 0
 	char name[20];
 	mame_file *fp;
 
@@ -747,6 +727,7 @@ void save_screen_snapshot(struct mame_bitmap *bitmap)
 		save_screen_snapshot_as(fp, bitmap);
 		mame_fclose(fp);
 	}
+#endif
 }
 
 
@@ -1088,7 +1069,7 @@ static int display_rom_load_results(struct rom_load_data *romdata)
 	int region;
 
 	/* final status display */
-	osd_display_loading_rom_message(NULL, romdata);
+	osd_display_loading_rom_message(NULL/*, romdata*/);
 
 	/* only display if we have warnings or errors */
 	if (romdata->warnings || romdata->errors)
@@ -1202,7 +1183,7 @@ static int open_rom_file(struct rom_load_data *romdata, const struct RomModule *
 	++romdata->romsloaded;
 
 	/* update status display */
-	if (osd_display_loading_rom_message(ROM_GETNAME(romp), romdata))
+	if (osd_display_loading_rom_message(ROM_GETNAME(romp)/*, romdata*/))
        return 0;
 
 	/* Attempt reading up the chain through the parents. It automatically also
@@ -1440,6 +1421,8 @@ static int process_rom_entries(struct rom_load_data *romdata, const struct RomMo
 {
 	UINT32 lastflags = 0;
 
+    logWriteX("Entrando en 'process_rom_entries'/src/common.c","","'",sceKernelGetThreadId());
+
 	/* loop until we hit the end of this region */
 	while (!ROMENTRY_ISREGIONEND(romp))
 	{
@@ -1479,11 +1462,17 @@ static int process_rom_entries(struct rom_load_data *romdata, const struct RomMo
 				const struct RomModule *baserom = romp;
 				int explength = 0;
 
+
+				logWriteX("'process_rom_entries' -open_rom_file- /src/common.c, abriendo='",ROM_GETNAME(romp),"'",sceKernelGetThreadId());
+
 				/* open the file */
 				debugload("Opening ROM file: %s\n", ROM_GETNAME(romp));
-				if (!open_rom_file(romdata, romp))
-					handle_missing_file(romdata, romp);
+				if (!open_rom_file(romdata, romp)){
 
+					logWriteX("'process_rom_entries' -FALLO open_rom_file- /src/common.c, abriendo='",ROM_GETNAME(romp),"', ->handle_missing_file",sceKernelGetThreadId());
+
+					handle_missing_file(romdata, romp);
+				}
 				/* loop until we run out of reloads */
 				do
 				{
@@ -1503,8 +1492,12 @@ static int process_rom_entries(struct rom_load_data *romdata, const struct RomMo
 
 						/* attempt to read using the modified entry */
 						readresult = read_rom_data(romdata, &modified_romp);
-						if (readresult == -1)
+						if (readresult == -1){
+
+							logWriteX("'process_rom_entries' -FALLO read_rom_data- /src/common.c, abriendo='",ROM_GETNAME(romp),"', --->goto fatalerror",sceKernelGetThreadId());
+
 							goto fatalerror;
+						}
 					}
 					while (ROMENTRY_ISCONTINUE(romp));
 
@@ -1663,6 +1656,10 @@ int rom_load(const struct RomModule *romp)
 	static struct rom_load_data romdata;
 	int regnum;
 
+    logWriteX(">\r\n---------------CRITICAL>-------------------------@common.c\r\n","","",sceKernelGetThreadId());
+    logWriteX("entrando en rom_load(); @common.c","","",sceKernelGetThreadId());
+
+
 	/* reset the region list */
 	for (regnum = 0;regnum < REGION_MAX;regnum++)
 		regionlist[regnum] = NULL;
@@ -1683,6 +1680,7 @@ int rom_load(const struct RomModule *romp)
 		int regiontype = ROMREGION_GETTYPE(region);
 
 		debugload("Processing region %02X (length=%X)\n", regiontype, ROMREGION_GETLENGTH(region));
+        logWriteY("common.c , rom_load: val1=region,","","",sceKernelGetThreadId(),regiontype,0);
 
 		/* the first entry must be a region */
 		if (!ROMENTRY_ISREGION(region))

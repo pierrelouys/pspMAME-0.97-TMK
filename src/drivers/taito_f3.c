@@ -489,11 +489,11 @@ NVRAM_HANDLER( taito_f3 )
 static MACHINE_DRIVER_START( f3 )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68EC020, 16000000)
+	MDRV_CPU_ADD(M68EC020, 16000000) //16000000 orig
 	MDRV_CPU_PROGRAM_MAP(f3_readmem,f3_writemem)
 	MDRV_CPU_VBLANK_INT(f3_interrupt,2)
 
-	MDRV_CPU_ADD(M68000, 16000000)
+	MDRV_CPU_ADD(M68000, 16000000) //16000000 orig
 	/* audio CPU */
 	MDRV_CPU_PROGRAM_MAP(sound_map,0)
 
@@ -3566,7 +3566,7 @@ GAME( 1994, bublbob2, 0,        f3_224a, f3, bubsymph, ROT0,   "Taito Corporatio
 GAME( 1994, bubsympe, bublbob2, f3_224a, f3, bubsymph, ROT0,   "Taito Corporation Japan",   "Bubble Symphony (Europe)" )
 GAME( 1994, bubsympu, bublbob2, f3_224a, f3, bubsymph, ROT0,   "Taito America Corporation", "Bubble Symphony (US)" )
 GAME( 1994, bubsymph, bublbob2, f3_224a, f3, bubsymph, ROT0,   "Taito Corporation",         "Bubble Symphony (Japan)" )
-GAME( 1994, spcinvdj, spacedx,  f3,      f3, spcinvdj, ROT0,   "Taito Corporation",         "Space Invaders DX (Japan F3 version)" )
+GAME( 1994, spcinvdj, dariusg,  f3,      f3, spcinvdj, ROT0,   "Taito Corporation",         "Space Invaders DX (Japan F3 version)" )
 GAME( 1994, pwrgoal,  0,        f3_224a, f3, hthero95, ROT0,   "Taito Corporation Japan",   "Taito Power Goal (World)" )
 GAME( 1994, hthero95, pwrgoal,  f3_224a, f3, hthero95, ROT0,   "Taito Corporation",         "Hat Trick Hero '95 (Japan)" )
 GAME( 1994, hthro95u, pwrgoal,  f3_224a, f3, hthero95, ROT0,   "Taito America Corporation", "Hat Trick Hero '95 (US)" )

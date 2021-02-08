@@ -68,7 +68,7 @@ enum {
 #define		P3		0xb0
 #define		IP		0xb8
 //8052 Only registers
-#if (HAS_I8052 || HAS_I8752)
+#if (HAS_I8052 || HAS_I8752 || HAS_I8752_ORIG)
  #define		T2CON	0xc8
  #define		RCAP2L	0xca
  #define		RCAP2H	0xcb
@@ -125,7 +125,7 @@ extern unsigned Dasm8051( char *dst, unsigned pc );
 /****************************************************************************
  * 8752 Section
  ****************************************************************************/
-#if (HAS_I8752)
+#if (HAS_I8752 || HAS_I8752_ORIG)
 #define i8752_icount							i8051_icount
 
 extern void i8752_init (void);					/* Initialize save states */

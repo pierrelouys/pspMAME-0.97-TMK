@@ -10,7 +10,9 @@
 #include "zlib.h"
 #include <time.h>
 
-
+#ifndef CLOCKS_PER_SEC
+#define CLOCKS_PER_SEC 1000000
+#endif
 
 /*************************************
  *
@@ -1484,12 +1486,12 @@ static int write_hunk_from_memory(struct chd_file *chd, UINT32 hunknum, const UI
 			codec->deflater.next_out = chd->compressed;
 			codec->deflater.avail_out = chd->header.hunkbytes;
 			codec->deflater.total_out = 0;
-			err = deflateReset(&codec->deflater);
+			//err = deflateReset(&codec->deflater);
 			if (err != Z_OK)
 				return CHDERR_COMPRESSION_ERROR;
 
 			/* do it */
-			err = deflate(&codec->deflater, Z_FINISH);
+			//err = deflate(&codec->deflater, Z_FINISH);
 
 			/* if we didn't run out of space, override the raw data with compressed */
 			if (err == Z_STREAM_END && codec->deflater.total_out < newentry.length)
@@ -2215,7 +2217,7 @@ static int init_codec(struct chd_file *chd)
 				data->deflater.zalloc = fast_alloc;
 				data->deflater.zfree = fast_free;
 				data->deflater.opaque = data;
-				err = deflateInit2(&data->deflater, Z_BEST_COMPRESSION, Z_DEFLATED, -MAX_WBITS, 8, Z_DEFAULT_STRATEGY);
+				//err = deflateInit2(&data->deflater, Z_BEST_COMPRESSION, Z_DEFLATED, -MAX_WBITS, 8, Z_DEFAULT_STRATEGY);
 			}
 
 			/* convert errors */
@@ -2265,7 +2267,7 @@ static void free_codec(struct chd_file *chd)
 				int i;
 
 				inflateEnd(&data->inflater);
-				deflateEnd(&data->deflater);
+				//deflateEnd(&data->deflater);
 
 				/* free our fast memory */
 				for (i = 0; i < MAX_ZLIB_ALLOCS; i++)

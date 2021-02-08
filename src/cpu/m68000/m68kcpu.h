@@ -1846,9 +1846,9 @@ INLINE void m68ki_exception_illegal(void)
 {
 	uint sr;
 
-	M68K_DO_LOG((M68K_LOG_FILEHANDLE "%s at %08x: illegal instruction %04x (%s)\n",
+	/*M68K_DO_LOG((M68K_LOG_FILEHANDLE "%s at %08x: illegal instruction %04x (%s)\n",
 				 m68ki_cpu_names[CPU_TYPE], ADDRESS_68K(REG_PPC), REG_IR,
-				 m68ki_disassemble_quick(ADDRESS_68K(REG_PPC))));
+				 m68ki_disassemble_quick(ADDRESS_68K(REG_PPC))));*/
 
 	sr = m68ki_init_exception();
 

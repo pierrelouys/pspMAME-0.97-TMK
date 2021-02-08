@@ -282,6 +282,7 @@ mame_file *mame_fopen(const char *gamename, const char *filename, int filetype, 
    (better encapsulation of the load by CRC used for ZIP files) */
 mame_file *mame_fopen_rom(const char *gamename, const char *filename, const char* exphash)
 {
+
 	return generic_fopen(FILETYPE_ROM, gamename, filename, exphash, FILEFLAG_OPENREAD | FILEFLAG_HASH);
 }
 
@@ -893,6 +894,7 @@ static mame_file *generic_fopen(int pathtype, const char *gamename, const char *
 
 	LOG(("generic_fopen(%d, %s, %s, %s, %X)\n", pathc, gamename, filename, extension, flags));
 
+
 	/* reset the file handle */
 	memset(&file, 0, sizeof(file));
 
@@ -927,6 +929,7 @@ static mame_file *generic_fopen(int pathtype, const char *gamename, const char *
 		compose_path(name, gamename, NULL, NULL);
 		LOG(("Trying %s\n", name));
 
+
 #ifdef MESS
 		if (is_absolute_path)
 		{
@@ -938,6 +941,8 @@ static mame_file *generic_fopen(int pathtype, const char *gamename, const char *
 				osd_create_directory(pathtype, pathindex, name);
 		}
 #endif
+
+
 
 		/* if the directory exists, proceed */
 		if (*name == 0 || osd_get_path_info(pathtype, pathindex, name) == PATH_IS_DIRECTORY)
@@ -958,10 +963,14 @@ static mame_file *generic_fopen(int pathtype, const char *gamename, const char *
 			/* otherwise, just open it straight */
 			else
 			{
+
+
 				file.type = PLAIN_FILE;
 				file.file = osd_fopen(pathtype, pathindex, name, access_modes[flags & 7]);
 				if (file.file == NULL && (flags & (3 | FILEFLAG_MUST_EXIST)) == 3)
 					file.file = osd_fopen(pathtype, pathindex, name, "w+b");
+
+
 				if (file.file != NULL)
 					break;
 			}
@@ -1220,6 +1229,9 @@ static int checksum_file(int pathtype, int pathindex, const char *file, UINT8 **
 /***************************************************************************
     mame_fputs
 ***************************************************************************/
+#ifndef CRLF
+#define CRLF 3
+#endif
 
 #if !defined(CRLF) || (CRLF < 1) || (CRLF > 3)
 #error CRLF undefined: must be 1 (CR), 2 (LF) or 3 (CR/LF)

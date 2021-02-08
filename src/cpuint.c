@@ -201,7 +201,7 @@ static void cpunum_empty_event_queue(int cpu_and_inputline)
 		int state = input_event & 0xff;
 		int vector = input_event >> 8;
 
-		LOG(("cpunum_empty_event_queue %d,%d,%d\n",cpunum,line,state));
+		//LOG(("cpunum_empty_event_queue %d,%d,%d\n",cpunum,line,state));
 
 		/* set the input line state and vector */
 		input_line_state[cpunum][line] = state;
@@ -294,11 +294,11 @@ void cpunum_set_input_line_vector(int cpunum, int line, int vector)
 {
 	if (cpunum < cpu_gettotalcpu() && line >= 0 && line < MAX_INPUT_LINES)
 	{
-		LOG(("cpunum_set_input_line_vector(%d,%d,$%04x)\n",cpunum,line,vector));
+		//LOG(("cpunum_set_input_line_vector(%d,%d,$%04x)\n",cpunum,line,vector));
 		interrupt_vector[cpunum][line] = vector;
 		return;
 	}
-	LOG(("cpunum_set_input_line_vector CPU#%d line %d > max input lines\n", cpunum, line));
+	//LOG(("cpunum_set_input_line_vector CPU#%d line %d > max input lines\n", cpunum, line));
 }
 
 
@@ -309,7 +309,7 @@ void cpunum_set_input_line_and_vector(int cpunum, int line, int state, int vecto
 		INT32 input_event = (state & 0xff) | (vector << 8);
 		int event_index = input_event_index[cpunum][line]++;
 
-		LOG(("cpunum_set_input_line_and_vector(%d,%d,%d,%02x)\n", cpunum, line, state, vector));
+		//LOG(("cpunum_set_input_line_and_vector(%d,%d,%d,%02x)\n", cpunum, line, state, vector));
 
 		/* if we're full of events, flush the queue and log a message */
 		if (event_index >= MAX_INPUT_EVENTS)
@@ -317,7 +317,7 @@ void cpunum_set_input_line_and_vector(int cpunum, int line, int state, int vecto
 			input_event_index[cpunum][line]--;
 			cpunum_empty_event_queue(cpunum | (line << 8));
 			event_index = input_event_index[cpunum][line]++;
-			logerror("Exceeded pending input line event queue on CPU %d!\n", cpunum);
+			//logerror("Exceeded pending input line event queue on CPU %d!\n", cpunum);
 		}
 
 		/* enqueue the event */
@@ -363,12 +363,12 @@ INLINE int cpu_irq_callback(int cpunum, int line)
 {
 	int vector = input_line_vector[cpunum][line];
 
-	LOG(("cpu_%d_irq_callback(%d) $%04x\n", cpunum, line, vector));
+	//LOG(("cpu_%d_irq_callback(%d) $%04x\n", cpunum, line, vector));
 
 	/* if the IRQ state is HOLD_LINE, clear it */
 	if (input_line_state[cpunum][line] == HOLD_LINE)
 	{
-		LOG(("->set_irq_line(%d,%d,%d)\n", cpunum, line, CLEAR_LINE));
+		//LOG(("->set_irq_line(%d,%d,%d)\n", cpunum, line, CLEAR_LINE));
 		activecpu_set_input_line(line, INTERNAL_CLEAR_LINE);
 		input_line_state[cpunum][line] = CLEAR_LINE;
 	}
@@ -528,7 +528,7 @@ void cpu_interrupt_enable(int cpunum,int enabled)
 {
 	interrupt_enable[cpunum] = enabled;
 
-LOG(("CPU#%d interrupt_enable=%d\n", cpunum, enabled));
+//LOG(("CPU#%d interrupt_enable=%d\n", cpunum, enabled));
 
 	/* make sure there are no queued interrupts */
 	if (enabled == 0)
@@ -555,7 +555,7 @@ WRITE8_HANDLER( interrupt_vector_w )
 	VERIFY_ACTIVECPU_VOID(interrupt_vector_w);
 	if (interrupt_vector[activecpu][0] != data)
 	{
-		LOG(("CPU#%d interrupt_vector_w $%02x\n", activecpu, data));
+		//LOG(("CPU#%d interrupt_vector_w $%02x\n", activecpu, data));
 		interrupt_vector[activecpu][0] = data;
 
 		/* make sure there are no queued interrupts */

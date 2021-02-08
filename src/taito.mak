@@ -112,5 +112,4 @@ $(OBJ)/shared.a: \
 	$(OBJ)/vidhrdw/res_net.o \
 
 # MAME specific core objs
-DESCJ =$(OBJ)/taito_descj.o
-COREOBJS += $(OBJ)/tiny.o $(OBJ)/cheat.o $(DESCJ)
+COREOBJS += $(OBJ)/tiny.o $(OBJ)/cheat.o

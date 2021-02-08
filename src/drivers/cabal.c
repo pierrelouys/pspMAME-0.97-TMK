@@ -547,12 +547,12 @@ static struct CustomSound_interface cabalbl_adpcm_interface =
 static MACHINE_DRIVER_START( cabal )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 12000000) /* 12 MHz */
+	MDRV_CPU_ADD(M68000, 10000000) /* orig 12 MHz */
 	MDRV_CPU_PROGRAM_MAP(readmem_cpu,writemem_cpu)
 	MDRV_CPU_VBLANK_INT(irq1_line_hold,1)
 
-	MDRV_CPU_ADD(Z80, 4000000)
-	/* audio CPU */	/* 4 MHz */
+	MDRV_CPU_ADD(Z80, 3500000)
+	/* audio CPU */	/* orig 4 MHz */
 	MDRV_CPU_PROGRAM_MAP(readmem_sound,writemem_sound)
 
 	MDRV_FRAMES_PER_SECOND(60)
@@ -573,7 +573,7 @@ static MACHINE_DRIVER_START( cabal )
 	/* sound hardware */
 	MDRV_SPEAKER_STANDARD_STEREO("left", "right")
 
-	MDRV_SOUND_ADD(YM2151, 3579580)
+	MDRV_SOUND_ADD(YM2151, 3500000) //orig 3579580
 	MDRV_SOUND_CONFIG(ym2151_interface)
 	MDRV_SOUND_ROUTE(0, "left", 0.80)
 	MDRV_SOUND_ROUTE(1, "right", 0.80)
@@ -592,12 +592,12 @@ MACHINE_DRIVER_END
 static MACHINE_DRIVER_START( cabalbl )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 12000000) /* 12 MHz */
+	MDRV_CPU_ADD(M68000, 10000000) /* orig 12 MHz */
 	MDRV_CPU_PROGRAM_MAP(cabalbl_readmem_cpu,cabalbl_writemem_cpu)
 	MDRV_CPU_VBLANK_INT(irq1_line_hold,1)
 
-	MDRV_CPU_ADD(Z80, 4000000)
-	/* audio CPU */	/* 4 MHz */
+	MDRV_CPU_ADD(Z80, 3500000)
+	/* audio CPU */	/* orig 4 MHz */
 	MDRV_CPU_PROGRAM_MAP(cabalbl_readmem_sound,cabalbl_writemem_sound)
 
 	MDRV_FRAMES_PER_SECOND(60)
@@ -619,7 +619,7 @@ static MACHINE_DRIVER_START( cabalbl )
 	/* sound hardware */
 	MDRV_SPEAKER_STANDARD_STEREO("left", "right")
 
-	MDRV_SOUND_ADD(YM2151, 3579580)
+	MDRV_SOUND_ADD(YM2151, 3500000) //orig 3579580
 	MDRV_SOUND_CONFIG(cabalbl_ym2151_interface)
 	MDRV_SOUND_ROUTE(0, "left", 0.80)
 	MDRV_SOUND_ROUTE(1, "right", 0.80)

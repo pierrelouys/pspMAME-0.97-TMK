@@ -955,15 +955,15 @@ static INTERRUPT_GEN( CPUB_interrupt )
 
 static MACHINE_DRIVER_START( twin16 )
 	// basic machine hardware
-	MDRV_CPU_ADD(Z80, 3579545)
+	MDRV_CPU_ADD(Z80, 3500000)//orig 3579545
 	/* audio CPU */
 	MDRV_CPU_PROGRAM_MAP(readmem_sound,writemem_sound)
 
-	MDRV_CPU_ADD(M68000, 10000000)
+	MDRV_CPU_ADD(M68000, 8000000) //orig 10000000
 	MDRV_CPU_PROGRAM_MAP(readmem_sub,writemem_sub)
 	MDRV_CPU_VBLANK_INT(CPUB_interrupt,1)
 
-	MDRV_CPU_ADD(M68000, 10000000)
+	MDRV_CPU_ADD(M68000, 8000000)//orig 10000000
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_VBLANK_INT(CPUA_interrupt,1)
 

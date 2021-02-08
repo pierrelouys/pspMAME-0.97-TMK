@@ -841,7 +841,7 @@ static void update_visible_area(struct mame_display *display)
 	vis_max_y = adjusted.max_y;
 
 	// track these changes
-	logerror("set visible area %d-%d %d-%d\n",vis_min_x,vis_max_x,vis_min_y,vis_max_y);
+	//logerror("set visible area %d-%d %d-%d\n",vis_min_x,vis_max_x,vis_min_y,vis_max_y);
 
 	// compute the visible width and height
 	vis_width  = vis_max_x - vis_min_x + 1;

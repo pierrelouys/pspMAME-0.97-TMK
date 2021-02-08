@@ -453,7 +453,7 @@ static struct MSM5205interface msm5205_interface =
 static MACHINE_DRIVER_START( toki ) /* KOYO 20.000MHz near the cpu */
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000,20000000/2) 	/* 10 MHz Toshiba TMP68000P-10 */
+	MDRV_CPU_ADD(M68000,20000000/2) //orig 20000000/2	/* 10 MHz Toshiba TMP68000P-10 */
 	MDRV_CPU_PROGRAM_MAP(toki_readmem,toki_writemem)
 	MDRV_CPU_VBLANK_INT(irq1_line_hold,1)/* VBL */
 

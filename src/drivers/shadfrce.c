@@ -553,11 +553,11 @@ static INTERRUPT_GEN( shadfrce_interrupt ) {
 
 
 static MACHINE_DRIVER_START( shadfrce )
-	MDRV_CPU_ADD(M68000, 28000000/2) /* ? Guess */
+	MDRV_CPU_ADD(M68000, 28000000/2 - 3000000) /* ? Guess */
 	MDRV_CPU_PROGRAM_MAP(shadfrce_readmem,shadfrce_writemem)
 	MDRV_CPU_VBLANK_INT(shadfrce_interrupt,2)
 
-	MDRV_CPU_ADD(Z80, 3579545)
+	MDRV_CPU_ADD(Z80, 3500000) //3579545
 	/* audio CPU */
 	MDRV_CPU_PROGRAM_MAP(readmem_sound,writemem_sound)
 
@@ -579,7 +579,7 @@ static MACHINE_DRIVER_START( shadfrce )
 	/* sound hardware */
 	MDRV_SPEAKER_STANDARD_STEREO("left", "right")
 
-	MDRV_SOUND_ADD(YM2151, 3579545)
+	MDRV_SOUND_ADD(YM2151, 3500000)//3579545
 	MDRV_SOUND_CONFIG(ym2151_interface)
 	MDRV_SOUND_ROUTE(0, "left", 0.50)
 	MDRV_SOUND_ROUTE(1, "right", 0.50)

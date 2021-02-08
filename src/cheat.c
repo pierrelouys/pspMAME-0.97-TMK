@@ -393,7 +393,7 @@ is selected
 
 #include "driver.h"
 #include "ui_text.h"
-#include "artwork.h"
+//#include "artwork.h"
 #include "machine/eeprom.h"
 #include <ctype.h>
 
@@ -1719,7 +1719,10 @@ void InitCheat(void)
 {
 	int	screenWidth, screenHeight;
 
-	artwork_get_screensize(&screenWidth, &screenHeight);
+	//artwork_get_screensize(&screenWidth, &screenHeight);
+
+    screenWidth = Machine->drv->screen_width;
+    screenHeight = Machine->drv->screen_height;
 
 	he_did_cheat =			0;
 
@@ -7942,7 +7945,7 @@ static UINT8 DefaultEnableRegion(SearchRegion * region, SearchInfo * info)
 
 #endif
 
-#if HAS_TMS34010
+#if (HAS_TMS34010  || HAS_TMS34010_ORIG)
 
 			// for exterminator, search bank one
 			if(	(Machine->drv->cpu[1].cpu_type == CPU_TMS34010) &&
@@ -10428,7 +10431,7 @@ static void BuildCPUInfoList(void)
 
 			switch(type)
 			{
-#if HAS_TMS34010
+#if (HAS_TMS34010  || HAS_TMS34010_ORIG)
 				case CPU_TMS34010:
 					info->addressShift = 3;
 					break;

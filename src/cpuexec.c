@@ -261,13 +261,17 @@ int cpu_init(void)
 	for (cpunum = 0; cpunum < MAX_CPU; cpunum++)
 	{
 		int cputype = Machine->drv->cpu[cpunum].cpu_type;
+        logWriteY("cpuexec.c@cpu_init(): dentro del for , val1='cputype'","","",666,cputype,0);
 
 		/* if this is a dummy, stop looking */
-		if (cputype == CPU_DUMMY)
+		if (cputype == CPU_DUMMY){
+			logWriteY("cpuexec.c@cpu_init(): dentro del for , cputype=='DUMMY'","","",666,cputype,0);
 			break;
-
+		}
 		/* set the save state tag */
 		state_save_set_current_tag(cpunum + 1);
+        logWriteY("cpuexec.c@cpu_init(): dentro del for , paso state_save_set_current_tag()","","",666,cputype,0);
+
 
 		/* initialize the cpuinfo struct */
 		memset(&cpu[cpunum], 0, sizeof(cpu[cpunum]));
@@ -276,28 +280,47 @@ int cpu_init(void)
 		cpu[cpunum].clockscale = 1.0;
 		cpu[cpunum].localtime = time_zero;
 
+        logWriteY("cpuexec.c@cpu_init(): dentro del for , paso bloque cpu[cpunum].localtime = time_zero;","","",666,cputype,0);
+
 		/* compute the cycle times */
 		sec_to_cycles[cpunum] = cpu[cpunum].clockscale * cpu[cpunum].clock;
 		cycles_to_sec[cpunum] = 1.0 / sec_to_cycles[cpunum];
 		cycles_per_second[cpunum] = sec_to_cycles[cpunum];
 		subseconds_per_cycle[cpunum] = MAX_SUBSECONDS / sec_to_cycles[cpunum];
 
+		logWriteY("cpuexec.c@cpu_init(): dentro del for , paso bloque subseconds_per_cycle[cpunum]","","",666,cputype,0);
+
 		/* initialize this CPU */
-		if (cpuintrf_init_cpu(cpunum, cputype))
+		if (cpuintrf_init_cpu(cpunum, cputype)){
 			return 1;
+		logWriteX("cpuexec.c@cpu_init(): cpuintrf_init_cpu --> return 1","","",666);
+		}
 	}
+
+    logWriteX("cpuexec.c@cpu_init(): paso el for buscando CPU...","","",666);
 
 	/* compute the perfect interleave factor */
 	compute_perfect_interleave();
 
+    logWriteX("cpuexec.c@cpu_init(): paso compute_perfect_interleave()...","","",666);
+
 	/* save some stuff in tag 0 */
 	state_save_set_current_tag(0);
+
+	logWriteX("cpuexec.c@cpu_init(): paso state_save_set_current_tag()...","","",666);
+
 	state_save_register_INT32("cpu", 0, "watchdog count", &watchdog_counter, 1);
 
-	/* reset the IRQ lines and save those */
-	if (cpuint_init())
-		return 1;
 
+    logWriteX("cpuexec.c@cpu_init(): paso state_save_register_INT32()...","","",666);
+
+	/* reset the IRQ lines and save those */
+	if (cpuint_init()){
+	   logWriteX("cpuexec.c@cpu_init(): cpuint_init() --> return 1","","",666);
+		return 1;
+	}
+
+	logWriteX("cpuexec.c@cpu_init(): zafo de todas --> return 0","","",666);
 	return 0;
 }
 
@@ -405,18 +428,25 @@ void cpu_run(void)
 		/* prepare everything to run */
 		cpu_pre_run();
 
+		//logWriteX("cpu_run: paso cpu_pre_run()...","","",sceKernelGetThreadId());
+
 		/* loop until the user quits or resets */
 		time_to_reset = 0;
 		while (!time_to_quit && !time_to_reset)
 		{
 			profiler_mark(PROFILER_EXTRA);
 
-			/* if we have a load/save scheduled, handle it */
-			if (loadsave_schedule != LOADSAVE_NONE)
-				handle_loadsave();
+			//logWriteX("cpu_run: paso profiler_mark()...","","",sceKernelGetThreadId());
 
+			/* if we have a load/save scheduled, handle it */
+			if (loadsave_schedule != LOADSAVE_NONE){
+				handle_loadsave();
+                //logWriteX("cpu_run: paso handle_loadsave()...","","",sceKernelGetThreadId());
+			}
 			/* execute CPUs */
 			cpu_timeslice();
+
+            //logWriteX("cpu_run: paso cpu_timeslice()...","","",sceKernelGetThreadId());
 
 			profiler_mark(PROFILER_END);
 		}
@@ -676,6 +706,8 @@ static void watchdog_callback(int param)
  *
  *************************************/
 
+
+
 static void watchdog_setup(void)
 {
 	if (watchdog_counter != WATCHDOG_IS_DISABLED)
@@ -835,14 +867,14 @@ static void cpu_timeslice(void)
 	mame_time base = mame_timer_get_time();
 	int cpunum, ran;
 
-	LOG(("------------------\n"));
-	LOG(("cpu_timeslice: target = %.9f\n", mame_time_to_double(target)));
+	/*LOG(("------------------\n"));
+	LOG(("cpu_timeslice: target = %.9f\n", mame_time_to_double(target)));*/
 
 	/* process any pending suspends */
 	for (cpunum = 0; Machine->drv->cpu[cpunum].cpu_type != CPU_DUMMY; cpunum++)
 	{
-		if (cpu[cpunum].suspend != cpu[cpunum].nextsuspend)
-			LOG(("--> updated CPU%d suspend from %X to %X\n", cpunum, cpu[cpunum].suspend, cpu[cpunum].nextsuspend));
+		/*if (cpu[cpunum].suspend != cpu[cpunum].nextsuspend)
+			LOG(("--> updated CPU%d suspend from %X to %X\n", cpunum, cpu[cpunum].suspend, cpu[cpunum].nextsuspend));*/
 		cpu[cpunum].suspend = cpu[cpunum].nextsuspend;
 		cpu[cpunum].eatcycles = cpu[cpunum].nexteatcycles;
 	}
@@ -855,7 +887,7 @@ static void cpu_timeslice(void)
 		{
 			/* compute how long to run */
 			cycles_running = MAME_TIME_TO_CYCLES(cpunum, sub_mame_times(target, cpu[cpunum].localtime));
-			LOG(("  cpu %d: %d cycles\n", cpunum, cycles_running));
+			//LOG(("  cpu %d: %d cycles\n", cpunum, cycles_running));
 
 			/* run for the requested number of cycles */
 			if (cycles_running > 0)
@@ -877,7 +909,7 @@ static void cpu_timeslice(void)
 				/* account for these cycles */
 				cpu[cpunum].totalcycles += ran;
 				cpu[cpunum].localtime = add_mame_times(cpu[cpunum].localtime, MAME_TIME_IN_CYCLES(ran, cpunum));
-				LOG(("         %d ran, %d total, time = %.9f\n", ran, (INT32)cpu[cpunum].totalcycles, mame_time_to_double(cpu[cpunum].localtime)));
+				//LOG(("         %d ran, %d total, time = %.9f\n", ran, (INT32)cpu[cpunum].totalcycles, mame_time_to_double(cpu[cpunum].localtime)));
 
 				/* if the new local CPU time is less than our target, move the target up */
 				if (compare_mame_times(cpu[cpunum].localtime, target) < 0)
@@ -886,7 +918,7 @@ static void cpu_timeslice(void)
 						target = cpu[cpunum].localtime;
 					else
 						target = base;
-					LOG(("         (new target)\n"));
+					//LOG(("         (new target)\n"));
 				}
 			}
 		}
@@ -900,16 +932,16 @@ static void cpu_timeslice(void)
 		{
 			/* compute how long to run */
 			cycles_running = MAME_TIME_TO_CYCLES(cpunum, sub_mame_times(target, cpu[cpunum].localtime));
-			LOG(("  cpu %d: %d cycles (suspended)\n", cpunum, cycles_running));
+			//LOG(("  cpu %d: %d cycles (suspended)\n", cpunum, cycles_running));
 
 			cpu[cpunum].totalcycles += cycles_running;
 			cpu[cpunum].localtime = add_mame_times(cpu[cpunum].localtime, MAME_TIME_IN_CYCLES(cycles_running, cpunum));
-			LOG(("         %d skipped, %d total, time = %.9f\n", cycles_running, (INT32)cpu[cpunum].totalcycles, mame_time_to_double(cpu[cpunum].localtime)));
+			//LOG(("         %d skipped, %d total, time = %.9f\n", cycles_running, (INT32)cpu[cpunum].totalcycles, mame_time_to_double(cpu[cpunum].localtime)));
 		}
 
 		/* update the suspend state */
-		if (cpu[cpunum].suspend != cpu[cpunum].nextsuspend)
-			LOG(("--> updated CPU%d suspend from %X to %X\n", cpunum, cpu[cpunum].suspend, cpu[cpunum].nextsuspend));
+		/*if (cpu[cpunum].suspend != cpu[cpunum].nextsuspend)
+			LOG(("--> updated CPU%d suspend from %X to %X\n", cpunum, cpu[cpunum].suspend, cpu[cpunum].nextsuspend));*/
 		cpu[cpunum].suspend = cpu[cpunum].nextsuspend;
 		cpu[cpunum].eatcycles = cpu[cpunum].nexteatcycles;
 	}
@@ -940,7 +972,7 @@ void activecpu_abort_timeslice(void)
 	int current_icount;
 
 	VERIFY_EXECUTINGCPU_VOID(activecpu_abort_timeslice);
-	LOG(("activecpu_abort_timeslice (CPU=%d, cycles_left=%d)\n", cpu_getexecutingcpu(), activecpu_get_icount() + 1));
+	//LOG(("activecpu_abort_timeslice (CPU=%d, cycles_left=%d)\n", cpu_getexecutingcpu(), activecpu_get_icount() + 1));
 
 	/* swallow the remaining cycles */
 	current_icount = activecpu_get_icount() + 1;
@@ -987,7 +1019,7 @@ mame_time cpunum_get_localtime(int cpunum)
 void cpunum_suspend(int cpunum, int reason, int eatcycles)
 {
 	VERIFY_CPUNUM_VOID(cpunum_suspend);
-	LOG(("cpunum_suspend (CPU=%d, r=%X, eat=%d)\n", cpunum, reason, eatcycles));
+	//LOG(("cpunum_suspend (CPU=%d, r=%X, eat=%d)\n", cpunum, reason, eatcycles));
 
 	/* set the pending suspend bits, and force a resync */
 	cpu[cpunum].nextsuspend |= reason;
@@ -1008,7 +1040,7 @@ void cpunum_suspend(int cpunum, int reason, int eatcycles)
 void cpunum_resume(int cpunum, int reason)
 {
 	VERIFY_CPUNUM_VOID(cpunum_resume);
-	LOG(("cpunum_resume (CPU=%d, r=%X)\n", cpunum, reason));
+	//LOG(("cpunum_resume (CPU=%d, r=%X)\n", cpunum, reason));
 
 	/* clear the pending suspend bits, and force a resync */
 	cpu[cpunum].nextsuspend &= ~reason;
@@ -1123,7 +1155,7 @@ void cpu_boost_interleave(double _timeslice_time, double _boost_duration)
 	if (compare_mame_times(timeslice_time, perfect_interleave) < 0)
 		timeslice_time = perfect_interleave;
 
-	LOG(("cpu_boost_interleave(%.9f, %.9f)\n", mame_time_to_double(timeslice_time), mame_time_to_double(boost_duration)));
+	//LOG(("cpu_boost_interleave(%.9f, %.9f)\n", mame_time_to_double(timeslice_time), mame_time_to_double(boost_duration)));
 
 	/* adjust the interleave timer */
 	mame_timer_adjust(interleave_boost_timer, timeslice_time, 0, timeslice_time);
@@ -1334,7 +1366,7 @@ void cpu_compute_scanline_timing(void)
 	else
 		scanline_period.subseconds /= Machine->drv->screen_height;
 
-	LOG(("cpu_compute_scanline_timing: refresh=%.9f vblank=%.9f scanline=%.9f\n", mame_time_to_double(refresh_period), mame_time_to_double(vblank_period), mame_time_to_double(scanline_period)));
+	//LOG(("cpu_compute_scanline_timing: refresh=%.9f vblank=%.9f scanline=%.9f\n", mame_time_to_double(refresh_period), mame_time_to_double(vblank_period), mame_time_to_double(scanline_period)));
 }
 
 
@@ -1904,7 +1936,7 @@ static void cpu_timeslicecallback(int param)
 static void end_interleave_boost(int param)
 {
 	mame_timer_adjust(interleave_boost_timer, time_never, 0, time_never);
-	LOG(("end_interleave_boost\n"));
+	//LOG(("end_interleave_boost\n"));
 }
 
 
@@ -1940,7 +1972,7 @@ static void compute_perfect_interleave(void)
 	if (perfect_interleave.subseconds == MAX_SUBSECONDS - 1)
 		perfect_interleave.subseconds = subseconds_per_cycle[0];
 
-	LOG(("Perfect interleave = %.9f, smallest = %.9f\n", mame_time_to_double(perfect_interleave), SUBSECONDS_TO_DOUBLE(smallest)));
+	//LOG(("Perfect interleave = %.9f, smallest = %.9f\n", mame_time_to_double(perfect_interleave), SUBSECONDS_TO_DOUBLE(smallest)));
 }
 
 

@@ -1277,7 +1277,7 @@ ROM_END
  *  Game drivers
  *
  *************************************/
-
+/*	( YEAR	NAME	  PARENT	MACHINE   INPUT 	INIT	  MONITOR COMPANY  FULLNAME FLAGS ) */
 GAME( 1992, mk,       0,       tunit_adpcm, mk,       mktunit,  ROT0, "Midway",   "Mortal Kombat (rev 5.0 T-Unit 03/19/93)" )
 GAME( 1992, mkr4,     mk,      tunit_adpcm, mk,       mktunit,  ROT0, "Midway",   "Mortal Kombat (rev 4.0 T-Unit 02/11/93)" )
 

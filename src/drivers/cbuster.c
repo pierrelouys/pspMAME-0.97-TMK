@@ -359,10 +359,11 @@ static struct YM2151interface ym2151_interface =
 static MACHINE_DRIVER_START( twocrude )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 12000000) /* Custom chip 59 */
+	MDRV_CPU_ADD(M68000, 12000000) /* Custom chip 59 *///original 12000000
 	MDRV_CPU_PROGRAM_MAP(twocrude_readmem,twocrude_writemem)
 	MDRV_CPU_VBLANK_INT(irq4_line_hold,1)/* VBL */
 
+    //orig 32220000/4
 	MDRV_CPU_ADD(H6280,32220000/4) /* Custom chip 45, Audio section crystal is 32.220 MHz */
 	MDRV_CPU_PROGRAM_MAP(sound_readmem,sound_writemem)
 

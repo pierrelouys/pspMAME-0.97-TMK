@@ -921,11 +921,11 @@ static MACHINE_INIT(gaiapols)
 static MACHINE_DRIVER_START( mystwarr )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD_TAG("main", M68000, 16000000)	/* 16 MHz (confirmed) */
+	MDRV_CPU_ADD_TAG("main", M68000, 12000000)	//orig 16000000/* 16 MHz (confirmed) */
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_VBLANK_INT(mystwarr_interrupt, 3)
 
-	MDRV_CPU_ADD_TAG("sound", Z80, 8000000)
+	MDRV_CPU_ADD_TAG("sound", Z80, 6000000) //orig 8000000
 	/* audio CPU */
 	MDRV_CPU_PROGRAM_MAP(sound_readmem,sound_writemem)
 	MDRV_CPU_PERIODIC_INT(nmi_line_pulse, 480)

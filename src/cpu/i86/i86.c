@@ -331,7 +331,7 @@ static offs_t i186_dasm(char *buffer, offs_t pc)
 
 
 
-#if defined(INCLUDE_V20) && (HAS_V20 || HAS_V30 || HAS_V33)
+#if defined(INCLUDE_V20) && (HAS_V20 || HAS_V30 || HAS_V33 || HAS_V30_ORIG || HAS_V33_ORIG)
 
 #include "v30.h"
 #include "v30intf.h"
@@ -748,7 +748,7 @@ void v20_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if defined(INCLUDE_V20) && (HAS_V30)
+#if defined(INCLUDE_V20) && (HAS_V30 || HAS_V30_ORIG)
 /**************************************************************************
  * CPU-specific get_info/set_info
  **************************************************************************/
@@ -794,7 +794,7 @@ void v30_get_info(UINT32 state, union cpuinfo *info)
 #endif
 
 
-#if defined(INCLUDE_V20) && (HAS_V33)
+#if defined(INCLUDE_V20) && (HAS_V33 || HAS_V33_ORIG)
 /**************************************************************************
  * CPU-specific get_info/set_info
  **************************************************************************/

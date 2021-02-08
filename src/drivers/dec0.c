@@ -857,7 +857,7 @@ static struct YM3812interface ym3812b_interface =
 static MACHINE_DRIVER_START( hbarrel )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 10000000)
+	MDRV_CPU_ADD(M68000, 8000000)
 	MDRV_CPU_PROGRAM_MAP(dec0_readmem,dec0_writemem)
 	MDRV_CPU_VBLANK_INT(irq6_line_hold,1)/* VBL, level 5 interrupts from i8751 */
 
@@ -941,7 +941,7 @@ MACHINE_DRIVER_END
 static MACHINE_DRIVER_START( birdtry )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 10000000)
+	MDRV_CPU_ADD(M68000, 8000000)
 	MDRV_CPU_PROGRAM_MAP(dec0_readmem,dec0_writemem)
 	MDRV_CPU_VBLANK_INT(irq6_line_hold,1)/* VBL, level 5 interrupts from i8751 */
 
@@ -1071,7 +1071,7 @@ MACHINE_DRIVER_END
 static MACHINE_DRIVER_START( hippodrm )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 10000000)
+	MDRV_CPU_ADD(M68000, 8000000)
 	MDRV_CPU_PROGRAM_MAP(dec0_readmem,dec0_writemem)
 	MDRV_CPU_VBLANK_INT(irq6_line_hold,1)/* VBL */
 
@@ -1117,7 +1117,7 @@ MACHINE_DRIVER_END
 static MACHINE_DRIVER_START( slyspy )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 12000000)
+	MDRV_CPU_ADD(M68000, 10000000)
 	MDRV_CPU_PROGRAM_MAP(slyspy_readmem,slyspy_writemem)
 	MDRV_CPU_VBLANK_INT(irq6_line_hold,1)/* VBL */
 
@@ -1159,7 +1159,7 @@ MACHINE_DRIVER_END
 static MACHINE_DRIVER_START( midres )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD(M68000, 12000000)
+	MDRV_CPU_ADD(M68000, 10000000)
 	MDRV_CPU_PROGRAM_MAP(midres_readmem,midres_writemem)
 	MDRV_CPU_VBLANK_INT(irq6_line_hold,1)/* VBL */
 

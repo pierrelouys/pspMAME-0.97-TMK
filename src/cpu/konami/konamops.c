@@ -183,11 +183,11 @@ INLINE void sync( void )
 	/* SYNC stops processing instructions until an interrupt request happens. */
 	/* This doesn't require the corresponding interrupt to be enabled: if it */
 	/* is disabled, execution continues with the next instruction. */
-	konami.int_state |= KONAMI_SYNC;
+	konamicpu.int_state |= KONAMI_SYNC;
 	CHECK_IRQ_LINES;
 	/* if KONAMI_SYNC has not been cleared by CHECK_IRQ_LINES,
      * stop execution until the interrupt lines change. */
-	if( (konami.int_state & KONAMI_SYNC) && konami_ICount > 0 )
+	if( (konamicpu.int_state & KONAMI_SYNC) && konami_ICount > 0 )
 		konami_ICount = 0;
 }
 
@@ -527,7 +527,7 @@ INLINE void leay( void )
 INLINE void leas( void )
 {
 	S = EA;
-	konami.int_state |= KONAMI_LDS;
+	konamicpu.int_state |= KONAMI_LDS;
 }
 
 /* $33 LEAU indexed ----- */
@@ -656,9 +656,9 @@ INLINE void cwai( void )
 	PUSHBYTE(B);
 	PUSHBYTE(A);
 	PUSHBYTE(CC);
-	konami.int_state |= KONAMI_CWAI;
+	konamicpu.int_state |= KONAMI_CWAI;
 	CHECK_IRQ_LINES;
-	if( (konami.int_state & KONAMI_CWAI) && konami_ICount > 0 )
+	if( (konamicpu.int_state & KONAMI_CWAI) && konami_ICount > 0 )
 		konami_ICount = 0;
 }
 
@@ -2289,7 +2289,7 @@ INLINE void lds_im( void )
 	IMMWORD(pS);
 	CLR_NZV;
 	SET_NZ16(S);
-	konami.int_state |= KONAMI_LDS;
+	konamicpu.int_state |= KONAMI_LDS;
 }
 
 /* is this a legal instruction? */
@@ -2474,7 +2474,7 @@ INLINE void lds_di( void )
 	DIRWORD(pS);
 	CLR_NZV;
 	SET_NZ16(S);
-	konami.int_state |= KONAMI_LDS;
+	konamicpu.int_state |= KONAMI_LDS;
 }
 
 /* $dF STU (STS) direct -**0- */
@@ -2647,7 +2647,7 @@ INLINE void lds_ix( void )
 	S=RM16(EAD);
 	CLR_NZV;
 	SET_NZ16(S);
-	konami.int_state |= KONAMI_LDS;
+	konamicpu.int_state |= KONAMI_LDS;
 }
 
 /* $eF STU (STS) indexed -**0- */
@@ -2827,7 +2827,7 @@ INLINE void lds_ex( void )
 	EXTWORD(pS);
 	CLR_NZV;
 	SET_NZ16(S);
-	konami.int_state |= KONAMI_LDS;
+	konamicpu.int_state |= KONAMI_LDS;
 }
 
 /* $fF STU (STS) extended -**0- */
@@ -2853,8 +2853,8 @@ INLINE void setline_im( void )
 	UINT8 t;
 	IMMBYTE(t);
 
-	if ( konami.setlines_callback )
-		(*konami.setlines_callback)( t );
+	if ( konamicpu.setlines_callback )
+		(*konamicpu.setlines_callback)( t );
 }
 
 INLINE void setline_ix( void )
@@ -2862,8 +2862,8 @@ INLINE void setline_ix( void )
 	UINT8 t;
 	t = RM(EA);
 
-	if ( konami.setlines_callback )
-		(*konami.setlines_callback)( t );
+	if ( konamicpu.setlines_callback )
+		(*konamicpu.setlines_callback)( t );
 }
 
 INLINE void setline_di( void )
@@ -2871,8 +2871,8 @@ INLINE void setline_di( void )
 	UINT8 t;
 	DIRBYTE(t);
 
-	if ( konami.setlines_callback )
-		(*konami.setlines_callback)( t );
+	if ( konamicpu.setlines_callback )
+		(*konamicpu.setlines_callback)( t );
 }
 
 INLINE void setline_ex( void )
@@ -2880,8 +2880,8 @@ INLINE void setline_ex( void )
 	UINT8 t;
 	EXTBYTE(t);
 
-	if ( konami.setlines_callback )
-		(*konami.setlines_callback)( t );
+	if ( konamicpu.setlines_callback )
+		(*konamicpu.setlines_callback)( t );
 }
 
 INLINE void bmove( void )
@@ -3743,7 +3743,7 @@ INLINE void opcode2( void )
 //  case 0x06: EA=0; break; /* normal */
 	case 0x07:
 		EAD=0;
-		(*konami_extended[konami.ireg])();
+		(*konami_extended[konamicpu.ireg])();
         konami_ICount -= 2;
 		return;
 //  case 0x08: EA=0; break; /* indirect - auto increment */
@@ -4294,7 +4294,7 @@ INLINE void opcode2( void )
 //  case 0xc3: EA=0; break; /* ???? */
 	case 0xc4:
 		EAD=0;
-		(*konami_direct[konami.ireg])();
+		(*konami_direct[konamicpu.ireg])();
         konami_ICount -= 1;
 		return;
 //  case 0xc5: EA=0; break; /* ???? */
@@ -4426,5 +4426,5 @@ INLINE void opcode2( void )
 		logerror("KONAMI: Unknown/Invalid postbyte at PC = %04x\n", PC -1 );
         EAD = 0;
 	}
-	(*konami_indexed[konami.ireg])();
+	(*konami_indexed[konamicpu.ireg])();
 }

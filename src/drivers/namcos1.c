@@ -2474,7 +2474,7 @@ ROM_START( tankfrcj )
 ROM_END
 
 
-
+//splatterhouse ROT180 original
 GAME( 1987, shadowld, 0,        ns1,     shadowld, shadowld, ROT180, "Namco", "Shadow Land" )
 GAME( 1987, youkaidk, shadowld, ns1,     shadowld, shadowld, ROT180, "Namco", "Yokai Douchuuki (Japan new version)" )
 GAME( 1987, yokaidko, shadowld, ns1,     shadowld, shadowld, ROT180, "Namco", "Yokai Douchuuki (Japan old version)" )
@@ -2492,7 +2492,7 @@ GAME( 1988, beraboho, berabohm, ns1,     berabohm, berabohm, ROT180, "Namco", "B
 GAME( 1988, mmaze,    0,        ns1,     mmaze,    alice,    ROT180, "Namco", "Marchen Maze (Japan)" )
 GAME( 1988, bakutotu, 0,        ns1,     bakutotu, bakutotu, ROT180, "Namco", "Bakutotsu Kijuutei" )
 GAME( 1988, wldcourt, 0,        ns1,     wldcourt, wldcourt, ROT180, "Namco", "World Court (Japan)" )
-GAME( 1988, splatter, 0,        ns1,     splatter, splatter, ROT180, "Namco", "Splatter House (Japan)" )
+GAME( 1988, splatter, 0,        ns1,     splatter, splatter, ROT0, "Namco", "Splatter House (Japan)" )
 GAME( 1988, faceoff,  0,        ns1,     faceoff,  faceoff,  ROT180, "Namco", "Face Off (Japan)" )
 GAME( 1989, rompers,  0,        ns1,     ns1,      rompers,  ROT90,  "Namco", "Rompers (Japan)" )
 GAME( 1989, romperso, rompers,  ns1,     ns1,      rompers,  ROT90,  "Namco", "Rompers (Japan old version)" )

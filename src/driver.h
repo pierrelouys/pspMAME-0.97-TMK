@@ -49,7 +49,7 @@
     Core MAME includes
 
 ***************************************************************************/
-
+#include <malloc.h>
 #include "osd_cpu.h"
 #include "memory.h"
 #include "mamedbg.h"
@@ -65,13 +65,27 @@
 #include "input.h"
 #include "inptport.h"
 #include "usrintrf.h"
-#include "cheat.h"
+//#include "cheat.h"
 #include "tilemap.h"
 #include "profiler.h"
+#include "fileDefs.h"
+#include "debugPsp.h"
+
+#include "psp/psp_main.h"
 
 #ifdef MESS
 #include "messdrv.h"
 #endif
+
+
+/***************************************************************************
+ * PSP ADDED
+ **************************************************************************/
+
+
+#define PSP_MAME_STREAMING_MODE 0
+
+/***************************************************************************/
 
 
 /***************************************************************************

@@ -9,7 +9,7 @@
 #include "driver.h"
 #include "config.h"
 #include "common.h"
-#include "expat.h"
+#include "expat/expat.h"
 
 
 #define DEBUG_CONFIG		0
@@ -597,13 +597,13 @@ static int config_load_xml(void)
 	curfile.parse.seq_index = -1;
 
 	/* create the XML parser */
-	parser = XML_ParserCreate(NULL);
+	//parser = XML_ParserCreate(NULL);
 	if (!parser)
 		goto error;
 
 	/* configure the parser */
-	XML_SetElementHandler(parser, config_element_start, config_element_end);
-	XML_SetCharacterDataHandler(parser, config_data);
+	//XML_SetElementHandler(parser, config_element_start, config_element_end);
+	//XML_SetCharacterDataHandler(parser, config_data);
 
 	/* loop through the file and parse it */
 	do
@@ -620,8 +620,8 @@ static int config_load_xml(void)
 		first = 0;
 
 		/* parse the data */
-		if (XML_Parse(parser, tempbuf, bytes, done) == XML_STATUS_ERROR)
-			goto error;
+		//if (XML_Parse(parser, tempbuf, bytes, done) == XML_STATUS_ERROR)
+			//goto error;
 
 	} while (!done);
 
@@ -640,12 +640,12 @@ static int config_load_xml(void)
 	}
 
 	/* free the parser */
-	XML_ParserFree(parser);
+	//XML_ParserFree(parser);
 	return 1;
 
 error:
-	if (parser)
-		XML_ParserFree(parser);
+	if (parser);
+		//XML_ParserFree(parser);
 	return 0;
 }
 

@@ -1,0 +1,9 @@
+コア改変情報	r0.4
+
+drivers/trackfld.c		連射ボタン追加
+sound/namco54.c			フリーズ対策
+inptport.c			ボタンの設定をPSP向けに一部変更
+mame.c				CFG保存タイミング変更等
+osdepend.h			cycles_tの型変更
+sndintrf.c			PSP向けパフォーマンス改善等
+usrintrf.c			CFG保存タイミング変更等

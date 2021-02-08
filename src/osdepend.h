@@ -23,6 +23,8 @@ extern "C" {
 int osd_init(void);
 void osd_exit(void);
 
+int osd_blitPreconfigure(void);
+
 #ifdef NEW_DEBUGGER
 void osd_wait_for_debugger(void);
 #endif
@@ -156,7 +158,7 @@ const char *osd_get_fps_text(const struct performance_info *performance);
   adjustment is necessary to avoid drifting over time.
 */
 int osd_start_audio_stream(int stereo);
-int osd_update_audio_stream(INT16 *buffer);
+int osd_update_audio_stream(/*void*/INT16 *buffer);
 void osd_stop_audio_stream(void);
 
 /*
@@ -284,6 +286,9 @@ UINT32 osd_fwrite(osd_file *file, const void *buffer, UINT32 length);
 void osd_fclose(osd_file *file);
 
 
+/*repuken2: helper to keep current directory available, needed by osd_fopen and related funcs*/
+void setCurrentAppDirectory(char* newCurDir);
+char* getCurrentAppDirectory(void);
 
 /******************************************************************************
 
@@ -320,7 +325,7 @@ void osd_free_executable(void *ptr);
 /* called while loading ROMs. It is called a last time with name == 0 to signal */
 /* that the ROM loading process is finished. */
 /* return non-zero to abort loading */
-int osd_display_loading_rom_message(const char *name,struct rom_load_data *romdata);
+int osd_display_loading_rom_message(const char *name/*,struct rom_load_data *romdata*/);
 
 /* called when the game is paused/unpaused, so the OS dependent code can do special */
 /* things like changing the title bar or darkening the display. */

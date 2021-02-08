@@ -551,12 +551,12 @@ static INTERRUPT_GEN( vendetta_irq )
 static MACHINE_DRIVER_START( vendetta )
 
 	/* basic machine hardware */
-	MDRV_CPU_ADD_TAG("main", KONAMI, 6000000)	/* this is strange, seems an overclock but */
+	MDRV_CPU_ADD_TAG("main", KONAMI, 6000000)	//orig 6000000 /* this is strange, seems an overclock but */
 //  MDRV_CPU_ADD_TAG("main", KONAMI, 3000000)   /* is needed to have correct music speed */
 	MDRV_CPU_PROGRAM_MAP(readmem,writemem)
 	MDRV_CPU_VBLANK_INT(vendetta_irq,1)
 
-	MDRV_CPU_ADD(Z80, 3579545)	/* verified with PCB */
+	MDRV_CPU_ADD(Z80, 3500000)	//orig 3579545/* verified with PCB */
 	/* audio CPU */
 	MDRV_CPU_PROGRAM_MAP(readmem_sound,writemem_sound)
                             /* interrupts are triggered by the main CPU */
@@ -578,11 +578,11 @@ static MACHINE_DRIVER_START( vendetta )
 	/* sound hardware */
 	MDRV_SPEAKER_STANDARD_STEREO("left", "right")
 
-	MDRV_SOUND_ADD(YM2151, 3579545)	/* verified with PCB */
+	MDRV_SOUND_ADD(YM2151, 3500000)	//orig 3579545/* verified with PCB */
 	MDRV_SOUND_ROUTE(0, "left", 1.0)
 	MDRV_SOUND_ROUTE(1, "right", 1.0)
 
-	MDRV_SOUND_ADD(K053260, 3579545)	/* verified with PCB */
+	MDRV_SOUND_ADD(K053260, 3500000) //orig 3579545	/* verified with PCB */
 	MDRV_SOUND_CONFIG(k053260_interface)
 	MDRV_SOUND_ROUTE(0, "left", 0.75)
 	MDRV_SOUND_ROUTE(1, "right", 0.75)
